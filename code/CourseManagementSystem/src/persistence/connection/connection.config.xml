@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connection>
+  <driver>com.mysql.jdbc.Driver</driver>
+  <dburl>jdbc:mysql://localhost:3306/course_management</dburl>
+  <user>root</user>
+  <password>root</password>
+</connection>

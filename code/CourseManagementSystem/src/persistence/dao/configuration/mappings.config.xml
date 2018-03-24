@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings>
+  <mapping model="Teacher" table="`course_management`.`teacher`">
+    <primary-key name="id" column="id"/>
+    <field name="userName" column="user_name"/>
+    <field name="password" column="password"/>
+    <field name="email" column="email"/>
+    <field name="firstName" column="first_name"/>
+    <field name="lastName" column="last_name"/>
+    <field name="phone" column="phone"/>
+  </mapping>
+</mappings>
