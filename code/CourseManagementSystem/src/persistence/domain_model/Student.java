@@ -1,12 +1,11 @@
 package persistence.domain_model;
 
-import java.util.List;
-
 public class Student extends User {
 	private int identityCardNumber;
 	private String personalNumericalCode;
 	private String address;
-	private List<Grade> grades;
+	private int groupId;
+	private Group group;
 	public int getIdentityCardNumber() {
 		return identityCardNumber;
 	}
@@ -25,10 +24,16 @@ public class Student extends User {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public List<Grade> getGrades() {
-		return grades;
+	public int getGroupId() {
+		return groupId;
 	}
-	public void setGrades(List<Grade> grades) {
-		this.grades = grades;
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+	public Group getGroup() {
+		return group;
+	}
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 }

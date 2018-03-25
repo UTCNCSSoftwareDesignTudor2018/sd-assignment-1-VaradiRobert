@@ -31,5 +31,8 @@ public class Course {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 }

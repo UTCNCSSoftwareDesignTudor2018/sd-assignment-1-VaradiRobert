@@ -3,7 +3,9 @@ package persistence.domain_model;
 public class Enrollment {
 	private int id;
 	private Student student;
+	private int studentId;
 	private Course course;
+	private int courseId;
 	private String status;
 	public Student getStudent() {
 		return student;
@@ -28,5 +30,17 @@ public class Enrollment {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getStudentId() {
+		return studentId;
+	}
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
+	}
+	public int getCourseId() {
+		return courseId;
+	}
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;
 	}
 }
