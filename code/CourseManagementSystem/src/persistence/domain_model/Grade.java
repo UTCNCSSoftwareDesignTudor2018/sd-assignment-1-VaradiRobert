@@ -1,6 +1,6 @@
 package persistence.domain_model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Grade {
 	private int id;
@@ -31,8 +31,8 @@ public class Grade {
 	public Date getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDate(Date date2) {
+		this.date = date2;
 	}
 	public Student getStudent() {
 		return student;

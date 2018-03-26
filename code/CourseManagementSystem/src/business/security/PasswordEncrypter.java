@@ -1,4 +1,4 @@
-package business_logic.security;
+package business.security;
 
 public class PasswordEncrypter {
 	public boolean match(String givenPassword, String actualPassword) {

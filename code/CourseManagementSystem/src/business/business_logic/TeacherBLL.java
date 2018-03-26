@@ -2,9 +2,10 @@ package business.business_logic;
 
 import java.util.List;
 
-import business_logic.security.PasswordEncrypter;
+import business.security.PasswordEncrypter;
 import persistence.dao.TeacherDAO;
 import persistence.domain_model.Course;
+import persistence.domain_model.Enrollment;
 import persistence.domain_model.Exam;
 import persistence.domain_model.Student;
 import persistence.domain_model.Teacher;
@@ -17,6 +18,7 @@ public class TeacherBLL implements TeacherInterface {
 	private EnrollmentBLL enrollmentBLL;
 	private CourseBLL courseBLL;
 	private GradeBLL gradeBLL;
+	private ExamBLL examBLL;
 	
 	public TeacherBLL() {
 		this.teacherDAO = new TeacherDAO();
@@ -24,6 +26,7 @@ public class TeacherBLL implements TeacherInterface {
 		this.studentBLL = new StudentBLL();
 		this.enrollmentBLL = new EnrollmentBLL();
 		this.courseBLL = new CourseBLL();
+		this.examBLL = new ExamBLL();
 	}
 
 	@Override
@@ -51,38 +54,41 @@ public class TeacherBLL implements TeacherInterface {
 	}
 
 	@Override
-	public void gradeStudent(String studentName, String courseName, int grade) {
+	public void gradeStudent(String studentName, String courseName, int grade, String teacherName) {
 		Student student = studentBLL.getStudentByUserName(studentName);
 		Course course = courseBLL.getCourseByName(courseName);
-		
+		Teacher teacher = getTeacherByName(teacherName);
+		gradeBLL.addGrade(student, course, teacher, grade);
 	}
 
 	@Override
 	public List<Student> getStudentsEnrolledTo(String courseName) {
-		// TODO Auto-generated method stub
-		return null;
+		Course course = courseBLL.getCourseByName(courseName);
+		return course.getEnrolledStudents();
 	}
 
 	@Override
 	public List<Course> getTaughtCourses(String userName) {
-		// TODO Auto-generated method stub
-		return null;
+		Teacher teacher = getTeacherByName(userName);
+		return examBLL.getCourses(teacher);
 	}
 
 	@Override
 	public List<Exam> getExams(String userName) {
-		// TODO Auto-generated method stub
-		return null;
+		Teacher teacher = getTeacherByName(userName);
+		return examBLL.getExams(teacher);
 	}
 
 	@Override
-	public List<Student> getEnrollmentRequests(String userName) {
-		// TODO Auto-generated method stub
+	public List<Enrollment> getEnrollmentRequests(String userName, String courseName) {
 		return null;
 	}
 
 	public Teacher getTeacherById(int teacherId) {
-		// TODO Auto-generated method stub
-		return null;
+		return teacherDAO.getAllObjectsWhere(t -> ((Teacher)t).getId() == teacherId).get(0);
+	}
+	
+	public Teacher getTeacherByName(String teacherName) {
+		return teacherDAO.getAllObjectsWhere(t -> ((Teacher)t).getUserName().equals(teacherName)).get(0);
 	}
 }

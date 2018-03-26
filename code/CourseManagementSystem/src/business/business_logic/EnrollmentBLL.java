@@ -10,6 +10,7 @@ import persistence.domain_model.Student;
 public class EnrollmentBLL {
 	private CourseBLL courseBLL;
 	private EnrollmentDAO enrollmentDAO;
+	private StudentBLL studentBLL;
 	private static int recordCount;
 	private static final String STATUS_REQUEST = "Request";
 	private static final String STATUS_ACCEPTED = "Accepted";
@@ -18,6 +19,7 @@ public class EnrollmentBLL {
 	public EnrollmentBLL() {
 		this.courseBLL = new CourseBLL();
 		this.enrollmentDAO = new EnrollmentDAO();
+		this.studentBLL = new StudentBLL();
 		recordCount = enrollmentDAO.getAllObjects().size();
 	}
 	
@@ -60,5 +62,11 @@ public class EnrollmentBLL {
 			e.setStudent(student);
 		}
 		return enrollments;
+	}
+	
+	public List<Student> getEnrolledStudents(int courseId) {
+		List<Enrollment> enrollments = enrollmentDAO.getAllObjectsWhere(e -> ((Enrollment)e).getCourseId() == courseId && ((Enrollment)e).getStatus().equals(STATUS_ACCEPTED));
+		List<Student> students = studentBLL.getStudents(enrollments);
+		return students;
 	}
 }

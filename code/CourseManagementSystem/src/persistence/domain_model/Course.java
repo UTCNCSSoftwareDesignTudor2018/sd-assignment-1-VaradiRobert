@@ -1,12 +1,12 @@
 package persistence.domain_model;
 
-import java.util.Map;
+import java.util.List;
 
 public class Course {
 	private int id;
 	private String name;
 	private int credits;
-	private Map<String, Student> enrolledStudents;
+	private List<Student> enrolledStudents;
 	public String getName() {
 		return name;
 	}
@@ -19,10 +19,10 @@ public class Course {
 	public void setCredits(int credits) {
 		this.credits = credits;
 	}
-	public Map<String, Student> getEnrolledStudents() {
+	public List<Student> getEnrolledStudents() {
 		return enrolledStudents;
 	}
-	public void setEnrolledStudents(Map<String, Student> enrolledStudents) {
+	public void setEnrolledStudents(List<Student> enrolledStudents) {
 		this.enrolledStudents = enrolledStudents;
 	}
 	public int getId() {

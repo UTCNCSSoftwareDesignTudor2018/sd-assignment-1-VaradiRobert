@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import business.security.PasswordEncrypter;
 import business.validators.Validator;
 import business.validators.student.StudentEmailValidator;
 import business.validators.student.StudentFirstNameValidator;
@@ -13,7 +14,6 @@ import business.validators.student.StudentLastNameValidator;
 import business.validators.student.StudentPasswordValidator;
 import business.validators.student.StudentPhoneValidator;
 import business.validators.student.StudentUserNameValidator;
-import business_logic.security.PasswordEncrypter;
 import persistence.dao.StudentDAO;
 import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
@@ -91,13 +91,15 @@ public class StudentBLL implements StudentInterface {
 	}
 
 	@Override
-	public void sendEnrollmentRequest(String userName, String courseName) {
+	public void sendEnrollmentRequest(String userName, String courseName, String teacherName) {
+		// TODO
 		Student student = getStudentByUserName(userName);
 		enrollmentBLL.enrollStudent(student, courseName);
 	}
 
 	@Override
-	public void unenrollFromCourse(String userName, String courseName) {
+	public void unenrollFromCourse(String userName, String courseName, String teacherName) {
+		// TODO
 		Student student = getStudentByUserName(userName);
 		enrollmentBLL.unenrollStudent(student, courseName);
 	}
@@ -187,5 +189,17 @@ public class StudentBLL implements StudentInterface {
 		student.setAddress(address);
 		validate(student);
 		studentDAO.updateObject(student);
+	}
+	
+	public List<Student> getStudents(List<Enrollment> enrollments) {
+		List<Student> students = studentDAO.getAllObjectsWhere(s -> {
+			for(Enrollment e : enrollments) {
+				if(((Student)s).getIdentityCardNumber() == e.getStudentId()) {
+					return true;
+				}
+			}
+			return false;
+		});
+		return students;
 	}
 }

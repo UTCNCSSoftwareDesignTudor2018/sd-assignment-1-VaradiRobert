@@ -15,8 +15,8 @@ public interface StudentInterface {
 	public void createProfile(String userName, String password, String passwordAgain, String email, String firstName, String lastName, String phone, String address);
 	public void updateProfile(String userName, String password, String passwordAgain, String email, String firstName, String lastName, String phone, String address);
 	public Student viewProfile(String userName);
-	public void sendEnrollmentRequest(String userName, String courseName);
-	public void unenrollFromCourse(String userName, String courseName);
+	public void sendEnrollmentRequest(String userName, String courseName, String teacherName);
+	public void unenrollFromCourse(String userName, String courseName, String teacherName);
 	public Group viewGroup(String userName);
 	public boolean login(String userName, String password);
 	public List<Exam> getExams(String userName);
