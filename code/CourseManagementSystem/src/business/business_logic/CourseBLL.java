@@ -8,17 +8,17 @@ import persistence.domain_model.Student;
 
 public class CourseBLL {
 	private CourseDAO courseDAO;
-	private EnrollmentBLL enrollmentBLL;
+	//private EnrollmentBLL enrollmentBLL;
 	public CourseBLL() {
 		this.courseDAO = new CourseDAO();
-		this.enrollmentBLL = new EnrollmentBLL();
+		///this.enrollmentBLL = new EnrollmentBLL();
 	}
 	
 	public Course getCourseByName(String courseName) {
 		Course course = courseDAO.getAllObjectsWhere(c -> ((Course)c).getName().equals(courseName)).get(0);
-		List<Student> students = enrollmentBLL.getEnrolledStudents(course.getId());
-		course.setEnrolledStudents(students);
-		return course;
+		//List<Student> students = enrollmentBLL.getEnrolledStudents(course.getId());
+		//course.setEnrolledStudents(students);
+		return null;
 	}
 	
 	public Course getCourseById(int courseId) {

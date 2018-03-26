@@ -11,7 +11,9 @@ import persistence.domain_model.Student;
 import service.controllers.StudentController;
 import service.controllers.TeacherController;
 import service.response.Response;
+import utilities.Observer;
 import view.commands.AcceptEnrollmentRequestCommand;
+import view.commands.Command;
 import view.commands.CreateProfileCommand;
 import view.commands.DeclineEnrollmentRequestCommand;
 import view.commands.GetCoursesCommand;
@@ -28,7 +30,7 @@ import view.commands.UpdateProfileCommand;
 import view.commands.ViewGroupCommand;
 import view.commands.ViewProfileCommand;
 
-public class ApplicationFacade {
+public class ApplicationFacade implements Observer {
 	private StudentController studentController;
 	private TeacherController teacherController;
 	
@@ -70,6 +72,7 @@ public class ApplicationFacade {
 	
 	public Response execute(StudentLoginCommand command) {
 		Boolean loggedIn = studentController.login(command);
+		System.err.println(loggedIn);
 		return null;
 	}
 	

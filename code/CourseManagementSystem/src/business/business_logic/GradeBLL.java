@@ -12,11 +12,11 @@ import persistence.domain_model.Teacher;
 
 public class GradeBLL {
 	private GradeDAO gradeDAO;
-	private ExamBLL examBLL;
+	//private ExamBLL examBLL;
 	private static int recordCount;
 	public GradeBLL() {
 		this.gradeDAO = new GradeDAO();
-		this.examBLL = new ExamBLL();
+		//this.examBLL = new ExamBLL();
 		recordCount = gradeDAO.getAllObjects().size();
 	}
 	
@@ -24,16 +24,16 @@ public class GradeBLL {
 		List<Grade> grades = gradeDAO.getAllObjectsWhere(g -> ((Grade)g).getStudentId() == student.getIdentityCardNumber());
 		for(Grade g : grades) {
 			g.setStudent(student);
-			g.setExam(examBLL.getExam(g.getExamId()));
+			//g.setExam(examBLL.getExam(g.getExamId()));
 		}
 		return grades;
 	}
 	
 	public void addGrade(Student student, Course course, Teacher teacher, int grade) {
 		Grade g = new Grade();
-		Exam exam = examBLL.getExam(course, teacher);
+		//Exam exam = examBLL.getExam(course, teacher);
 		g.setStudentId(student.getIdentityCardNumber());
-		g.setExamId(exam.getId());
+		//g.setExamId(exam.getId());
 		g.setValue(grade);
 		g.setDate(new Date());
 		g.setId(recordCount + 1);

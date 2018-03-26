@@ -28,7 +28,7 @@ public class StudentBLL implements StudentInterface {
 	private PasswordEncrypter pe;
 	private StudentDAO studentDAO;
 	private GroupBLL groupBLL;
-	private EnrollmentBLL enrollmentBLL;
+	///private EnrollmentBLL enrollmentBLL;
 	private GradeBLL gradeBLL;
 	private List<Validator<Student>> validators;
 	private static int recordCount = 0;
@@ -48,8 +48,9 @@ public class StudentBLL implements StudentInterface {
 	public StudentBLL() {
 		this.studentDAO = new StudentDAO();
 		this.groupBLL = new GroupBLL();
-		this.enrollmentBLL = new EnrollmentBLL();
+		//this.enrollmentBLL = new EnrollmentBLL();
 		this.gradeBLL = new GradeBLL();
+		validators = new ArrayList<Validator<Student>>();
 		validators.add(new StudentUserNameValidator());
 		validators.add(new StudentPasswordValidator());
 		validators.add(new StudentEmailValidator());
@@ -94,14 +95,14 @@ public class StudentBLL implements StudentInterface {
 	public void sendEnrollmentRequest(String userName, String courseName, String teacherName) {
 		// TODO
 		Student student = getStudentByUserName(userName);
-		enrollmentBLL.enrollStudent(student, courseName);
+		///enrollmentBLL.enrollStudent(student, courseName);
 	}
 
 	@Override
 	public void unenrollFromCourse(String userName, String courseName, String teacherName) {
 		// TODO
 		Student student = getStudentByUserName(userName);
-		enrollmentBLL.unenrollStudent(student, courseName);
+		///enrollmentBLL.unenrollStudent(student, courseName);
 	}
 
 	@Override
@@ -153,8 +154,8 @@ public class StudentBLL implements StudentInterface {
 	@Override
 	public List<Enrollment> getEnrollments(String userName) {
 		Student student = getStudentByUserName(userName);
-		List<Enrollment> enrollments = enrollmentBLL.getEnrollmentsForStudent(student);
-		return enrollments;
+		//List<Enrollment> enrollments = enrollmentBLL.getEnrollmentsForStudent(student);
+		return null;
 	}
 	
 	@Override

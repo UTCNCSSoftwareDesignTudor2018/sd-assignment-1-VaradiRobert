@@ -9,4 +9,14 @@
     <field name="lastName" column="last_name"/>
     <field name="phone" column="phone"/>
   </mapping>
+  <mapping model="Student" table="`course_management`.`student`">
+    <primary-key name="indentityCardNumber" column="identity_card_number"/>
+    <field name="personalNumericalCode" column="personal_numerical_code"/>
+    <field name="userName" column="user_name"/>
+    <field name="password" column="password"/>
+    <field name="email" column="email"/>
+    <field name="firstName" column="first_name"/>
+    <field name="lastName" column="last_name"/>
+    <field name="phone" column="phone"/>
+  </mapping>
 </mappings>
