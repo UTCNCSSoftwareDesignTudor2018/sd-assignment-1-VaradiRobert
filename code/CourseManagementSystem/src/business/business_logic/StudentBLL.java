@@ -1,6 +1,8 @@
 package business.business_logic;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,7 +81,6 @@ public class StudentBLL implements StudentInterface {
 		student.setLastName(lastName);
 		student.setPhone(phone);
 		student.setAddress(address);
-		student.setGroupId(1);
 		validate(student);
 		student.setPersonalNumericalCode(generatePersonalNumericalCode());
 		student.setIdentityCardNumber(studentDAO.getRecordCount() + 1);
@@ -100,6 +101,23 @@ public class StudentBLL implements StudentInterface {
 		}
 		student.setGroupId(groupIdToEnroll);
 		studentDAO.createStudent(student);;		
+		CourseInterface courseBLL = new CourseBLL();
+		List<Course> courses = courseBLL.getAll();
+		GradeInterface gradeBLL = new GradeBLL();
+		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
+		for(Course c : courses) {
+			Enrollment enrollment = new Enrollment();
+			enrollment.setStudentId(student.getIdentityCardNumber());
+			enrollment.setCourseId(c.getId());
+			enrollment.setStatus(EnrollmentBLL.STATUS_UNENROLLED);
+			enrollmentBLL.saveEnrollment(enrollment);
+			Grade grade = new Grade();
+			grade.setCourseId(c.getId());
+			grade.setStudentId(student.getIdentityCardNumber());
+			grade.setDate(new Date(Calendar.getInstance().getTime().getTime()));
+			grade.setValue(-1);
+			gradeBLL.saveGrade(grade);
+		}
 	}
 
 	@Override
@@ -138,7 +156,11 @@ public class StudentBLL implements StudentInterface {
 
 	@Override
 	public void sendEnrollmentRequest(String userName, String courseName) {
-		
+		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
+		Student student = studentDAO.findByUserName(userName);
+		CourseInterface courseBLL = new CourseBLL();
+		Course course = courseBLL.getCourseByName(courseName);
+		enrollmentBLL.sendEnrollmentRequest(student.getIdentityCardNumber(), course.getId());
 	}
 
 	@Override
@@ -210,5 +232,21 @@ public class StudentBLL implements StudentInterface {
 		return studentDAO.findAllByGroupId(groupId);
 	}
 
+	@Override
+	public Student getStudentById(int studentId) {
+		return studentDAO.findById(studentId);
+	}
+
+	@Override
+	public List<Student> getByEnrollments(List<Enrollment> enrollments) {
+		StudentInterface studentBLL = new StudentBLL();
+		List<Student> students = new ArrayList<Student>();
+		for(Enrollment e : enrollments) {
+			students.add(studentBLL.getStudentById(e.getStudentId()));
+		}
+		return students;
+	}
+
+	
 
 }

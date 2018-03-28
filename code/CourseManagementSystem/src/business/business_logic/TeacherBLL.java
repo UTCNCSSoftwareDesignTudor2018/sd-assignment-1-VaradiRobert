@@ -7,10 +7,12 @@ import business.security.PasswordEncrypter;
 import persistence.dao.TeacherDAO;
 import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
+import persistence.domain_model.Group;
 import persistence.domain_model.Student;
 import persistence.domain_model.Teacher;
 import service.interfaces.CourseInterface;
 import service.interfaces.EnrollmentInterface;
+import service.interfaces.GroupInterface;
 import service.interfaces.StudentInterface;
 import service.interfaces.TeacherInterface;
 
@@ -45,7 +47,7 @@ public class TeacherBLL implements TeacherInterface {
 		CourseInterface courseBLL = new CourseBLL();
 		Course course = courseBLL.getCourseByName(courseName);
 		Student student = studentBLL.getStudentByUserName(studentName);
-		enrollmentBLL.acceptStudentEnrollmentRequest(student.getIdentityCardNumber(), course.getId());
+		enrollmentBLL.acceptEnrollment(student.getIdentityCardNumber(), course.getId());
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class TeacherBLL implements TeacherInterface {
 		CourseInterface courseBLL = new CourseBLL();
 		Course course = courseBLL.getCourseByName(courseName);
 		Student student = studentBLL.getStudentByUserName(studentName);
-		enrollmentBLL.acceptStudentEnrollmentRequest(student.getIdentityCardNumber(), course.getId());
+		enrollmentBLL.declineEnrollment(student.getIdentityCardNumber(), course.getId());
 	}
 
 	@Override
@@ -75,7 +77,7 @@ public class TeacherBLL implements TeacherInterface {
 
 	@Override
 	public List<Course> getTaughtCourses(String userName) {
-		Teacher teacher = getTeacherByName(userName);
+		Teacher teacher = getTeacherByUserName(userName);
 		CourseInterface courseBLL = new CourseBLL();
 		return courseBLL.getCoursesByTeacherId(teacher.getId());
 	}
@@ -84,12 +86,24 @@ public class TeacherBLL implements TeacherInterface {
 	public List<Enrollment> getEnrollmentRequests(String userName, String courseName) {
 		return null;
 	}
-
+	@Override
 	public Teacher getTeacherById(int teacherId) {
 		return teacherDAO.findById(teacherId);
 	}
-	
-	public Teacher getTeacherByName(String teacherName) {
+	@Override
+	public Teacher getTeacherByUserName(String teacherName) {
 		return teacherDAO.getTeacherByUserName(teacherName);
 	}
+
+	@Override
+	public List<Group> getAllGroups() {
+		GroupInterface groupBLL = new GroupBLL();
+		StudentInterface studentBLL = new StudentBLL();
+		List<Group> groups = groupBLL.getAll();
+		for(Group g : groups) {
+			g.setStudents(studentBLL.getStudentsByGroupId(g.getId()));
+		}
+		return groups;
+	}
+	
 }

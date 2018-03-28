@@ -4,6 +4,7 @@ import java.util.List;
 
 import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
+import persistence.domain_model.Group;
 import persistence.domain_model.Student;
 import persistence.domain_model.Teacher;
 
@@ -17,4 +18,6 @@ public interface TeacherInterface {
 	public List<Course> getTaughtCourses(String userName);
 	public List<Enrollment> getEnrollmentRequests(String userName, String courseName);
 	public Teacher getTeacherById(int teacherId);
+	public Teacher getTeacherByUserName(String userName);
+	public List<Group> getAllGroups();
 }

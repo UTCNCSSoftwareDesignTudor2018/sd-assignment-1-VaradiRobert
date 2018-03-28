@@ -6,13 +6,13 @@ import service.response.LoginResponse;
 import service.response.Response;
 import service.response.StudentMainMenuResponse;
 import service.response.StudentProfileResponse;
-import service.response.TeacherMainMenuResponse;
 import utilities.Observer;
 import view.commands.CreateProfileCommand;
 import view.commands.SendEnrollmentRequestCommand;
 import view.commands.StudentLoginCommand;
 import view.commands.StudentLogoutCommand;
 import view.commands.TeacherLoginCommand;
+import view.commands.TeacherLogoutCommand;
 import view.commands.UnenrollFromCourseCommand;
 import view.commands.UpdateProfileCommand;
 import view.commands.ViewProfileCommand;
@@ -31,11 +31,6 @@ public class ApplicationFacade implements Observer {
 		return new LoginResponse();
 	}
 	
-	public Response execute(UpdateProfileCommand command) {
-		studentController.updateProfile(command);
-		return null;
-	}
-	
 	public Response execute(ViewProfileCommand command) {
 		return studentController.getProfile(command);
 	}
@@ -51,7 +46,7 @@ public class ApplicationFacade implements Observer {
 	public Response execute(TeacherLoginCommand command) {
 		boolean isLoggedIn = teacherController.login(command);
 		if(isLoggedIn) {
-			return new TeacherMainMenuResponse();
+			return teacherController.getProfile(command);
 		}
 		return new LoginResponse();
 	}
@@ -70,6 +65,16 @@ public class ApplicationFacade implements Observer {
 
 	public Response execute(StudentLogoutCommand command) {
 		studentController.logout();
+		return new LoginResponse();
+	}
+	
+	public Response execute(UpdateProfileCommand command) {
+		studentController.updateProfile(command);
+		return new LoginResponse();
+	}
+
+	public Response execute(TeacherLogoutCommand teacherLogoutCommand) {
+		teacherController.logout();
 		return new LoginResponse();
 	}
 	

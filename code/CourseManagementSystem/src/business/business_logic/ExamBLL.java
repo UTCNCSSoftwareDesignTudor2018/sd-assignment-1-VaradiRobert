@@ -8,7 +8,6 @@ import service.interfaces.ExamInterface;
 
 public class ExamBLL implements ExamInterface {
 	private ExamDAOInterface examDAO;
-	private CourseInterface courseBLL;
 	public ExamBLL() {
 		this.examDAO = new ExamDAO();
 	}
@@ -16,6 +15,7 @@ public class ExamBLL implements ExamInterface {
 	@Override
 	public Exam getExam(int examId) {
 		Exam exam = examDAO.getExamById(examId);
+		CourseInterface courseBLL = new CourseBLL();
 		exam.setCourse(courseBLL.getCourse(exam.getCourseId()));
 		return exam;
 	}
@@ -23,6 +23,7 @@ public class ExamBLL implements ExamInterface {
 	@Override
 	public Exam getExamByCourseId(int courseId) {
 		Exam exam = examDAO.getByCourseId(courseId);
+		CourseInterface courseBLL = new CourseBLL();
 		exam.setCourse(courseBLL.getCourse(courseId));
 		return exam;
 	}

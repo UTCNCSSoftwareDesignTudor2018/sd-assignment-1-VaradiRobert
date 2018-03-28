@@ -5,6 +5,8 @@ import java.util.List;
 import business.business_logic.StudentBLL;
 import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
+import persistence.domain_model.Exam;
+import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Student;
 import service.response.Response;
@@ -44,42 +46,54 @@ public class StudentController {
 	
 	public Response getProfile(ViewProfileCommand command) {
 		Student student = studentBLL.getStudentByUserName(loggedInUserName);
-		List<Enrollment> enrollments = studentBLL.getEnrollments(loggedInUserName);
-		List<Course> courses = studentBLL.getCourses(loggedInUserName);
+		List<Enrollment> enrollments = studentBLL.getEnrollments(student.getUserName());
+		List<Course> courses = studentBLL.getCourses(student.getUserName());
+		List<Exam> exams = studentBLL.getExams(student.getUserName());
+		List<Grade> grades = studentBLL.getGrades(student.getUserName());
 		Group group = studentBLL.getGroup(loggedInUserName);
 		StudentProfileResponse response = new StudentProfileResponse();
 		response.setStudent(student);
 		response.setEnrollments(enrollments);
 		response.setCourses(courses);
 		response.setGroup(group);
+		response.setExams(exams);
+		response.setGrades(grades);
 		return response;
 	}
 	
 	public Response unenrollFromCourse(UnenrollFromCourseCommand command) {
 		studentBLL.unenrollFromCourse(loggedInUserName, command.getCourseName());
 		Student student = studentBLL.getStudentByUserName(loggedInUserName);
-		List<Enrollment> enrollments = studentBLL.getEnrollments(loggedInUserName);
-		List<Course> courses = studentBLL.getCourses(loggedInUserName);
+		List<Enrollment> enrollments = studentBLL.getEnrollments(student.getUserName());
+		List<Course> courses = studentBLL.getCourses(student.getUserName());
+		List<Exam> exams = studentBLL.getExams(student.getUserName());
+		List<Grade> grades = studentBLL.getGrades(student.getUserName());
 		Group group = studentBLL.getGroup(loggedInUserName);
 		StudentProfileResponse response = new StudentProfileResponse();
 		response.setStudent(student);
 		response.setEnrollments(enrollments);
 		response.setCourses(courses);
 		response.setGroup(group);
+		response.setExams(exams);
+		response.setGrades(grades);
 		return response;
 	}
 
 	public Response enrollToCourse(SendEnrollmentRequestCommand command) {
 		studentBLL.sendEnrollmentRequest(loggedInUserName, command.getCourseName());
 		Student student = studentBLL.getStudentByUserName(loggedInUserName);
-		List<Enrollment> enrollments = studentBLL.getEnrollments(loggedInUserName);
-		List<Course> courses = studentBLL.getCourses(loggedInUserName);
+		List<Enrollment> enrollments = studentBLL.getEnrollments(student.getUserName());
+		List<Course> courses = studentBLL.getCourses(student.getUserName());
+		List<Exam> exams = studentBLL.getExams(student.getUserName());
+		List<Grade> grades = studentBLL.getGrades(student.getUserName());
 		Group group = studentBLL.getGroup(loggedInUserName);
 		StudentProfileResponse response = new StudentProfileResponse();
 		response.setStudent(student);
 		response.setEnrollments(enrollments);
 		response.setCourses(courses);
 		response.setGroup(group);
+		response.setExams(exams);
+		response.setGrades(grades);
 		return response;
 	}
 

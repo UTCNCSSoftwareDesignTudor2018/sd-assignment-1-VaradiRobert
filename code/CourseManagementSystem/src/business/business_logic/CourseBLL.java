@@ -5,8 +5,11 @@ import java.util.List;
 import business.interfaces.CourseDAOInterface;
 import persistence.dao.CourseDAO;
 import persistence.domain_model.Course;
+import persistence.domain_model.Enrollment;
 import persistence.domain_model.Teacher;
 import service.interfaces.CourseInterface;
+import service.interfaces.EnrollmentInterface;
+import service.interfaces.StudentInterface;
 import service.interfaces.TeacherInterface;
 
 public class CourseBLL implements CourseInterface {
@@ -34,12 +37,21 @@ public class CourseBLL implements CourseInterface {
 	@Override
 	public List<Course> getCoursesByTeacherId(int teacherId) {
 		TeacherInterface teacherBLL = new TeacherBLL();
+		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
+		StudentInterface studentBLL = new StudentBLL();
 		Teacher teacher = teacherBLL.getTeacherById(teacherId);
 		List<Course> courses = courseDAO.findCoursesByTeacherId(teacherId);
 		for(Course c : courses) {
+			List<Enrollment> enrollments = enrollmentBLL.getEnrollmentsByCourseId(c.getId());
+			c.setEnrolledStudents(studentBLL.getByEnrollments(enrollments));
 			c.setTeacher(teacher);
 		}
 		return courses;
+	}
+
+	@Override
+	public List<Course> getAll() {
+		return courseDAO.findAll();
 	}
 	
 }

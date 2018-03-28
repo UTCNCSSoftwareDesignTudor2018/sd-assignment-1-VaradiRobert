@@ -23,4 +23,6 @@ public interface StudentInterface {
 	public List<Enrollment> getEnrollments(String userName);
 	public Student getStudentByUserName(String studentName);
 	public List<Student> getStudentsByGroupId(int groupId);
+	public Student getStudentById(int studentId);
+	public List<Student> getByEnrollments(List<Enrollment> enrollments);
 }

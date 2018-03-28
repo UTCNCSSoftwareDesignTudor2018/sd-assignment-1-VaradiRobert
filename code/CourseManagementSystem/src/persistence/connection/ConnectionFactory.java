@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,7 +17,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 public class ConnectionFactory {
-	private static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class.getName());
+	//private static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class.getName());
 	private static final String CONNECTION_CONFIGURATION_FILE = "./src/persistence/connection/connection.config.xml";
 	private static final String DRIVER = "driver";
 	private static final String DBURL = "dburl";
@@ -43,9 +41,9 @@ public class ConnectionFactory {
 		password = doc.getElementsByTagName(PASSWORD).item(0).getTextContent();
 		try {
 			Class.forName(driver);
-			System.out.println("Connection successful...");
+			//System.out.println("Connection successful...");
 		} catch(ClassNotFoundException e) {
-			System.out.println("Connection failed!");
+			//System.out.println("Connection failed!");
 			throw e;
 		}
 	}
@@ -65,9 +63,9 @@ public class ConnectionFactory {
 		Connection connection = null;
 		try {
 			connection = (Connection)DriverManager.getConnection(dbUrl, user, password);
-			System.out.println("Connected...");
+			//System.out.println("Connected...");
 		} catch(SQLException e) {
-			LOGGER.log(Level.WARNING, "An error occurred while trying to connect to the database!");
+			//LOGGER.log(Level.WARNING, "An error occurred while trying to connect to the database!");
 			throw e;
 		}
 		return connection;
@@ -77,9 +75,9 @@ public class ConnectionFactory {
 		if(connection != null) {
 			try {
 				connection.close();
-				System.out.println("Connection closed...");
+				//System.out.println("Connection closed...");
 			} catch(SQLException e) {
-				LOGGER.log(Level.WARNING, "An error occurred while trying to close the connection!");
+				//LOGGER.log(Level.WARNING, "An error occurred while trying to close the connection!");
 				throw e;
 			}
 		}
@@ -89,9 +87,9 @@ public class ConnectionFactory {
 		if(statement != null) {
 			try {
 				statement.close();
-				System.out.println("Statement closed...");
+				//System.out.println("Statement closed...");
 			} catch(SQLException e) {
-				LOGGER.log(Level.WARNING, "An error occurred while trying to close the statement!");
+				//LOGGER.log(Level.WARNING, "An error occurred while trying to close the statement!");
 				throw e;
 			}
 		}
@@ -101,9 +99,9 @@ public class ConnectionFactory {
 		if(resultSet != null) {
 			try {
 				resultSet.close();
-				System.out.println("ResultSet closed...");
+				//System.out.println("ResultSet closed...");
 			} catch(SQLException e) {
-				LOGGER.log(Level.WARNING, "An error occurred while trying to close the result set!");
+				//LOGGER.log(Level.WARNING, "An error occurred while trying to close the result set!");
 				throw e;
 			}
 		}

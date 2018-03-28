@@ -10,19 +10,24 @@ import service.interfaces.GradeInterface;
 
 public class GradeBLL implements GradeInterface {
 	private GradeDAOInterface gradeDAO;
-	private CourseInterface courseBLL;
-	
 	public GradeBLL() {
 		this.gradeDAO = new GradeDAO();
 	}
 	
 	@Override
 	public List<Grade> getGradesByStudentId(int studentId) {
+		CourseInterface courseBLL = new CourseBLL();
 		List<Grade> grades = gradeDAO.findByStudentId(studentId);
 		for(Grade grade : grades) {
 			grade.setCourse(courseBLL.getCourse(grade.getCourseId()));
 		}
 		return grades;
+	}
+
+	@Override
+	public void saveGrade(Grade grade) {
+		grade.setId(gradeDAO.findAll().size() + 1);
+		gradeDAO.addGrade(grade);
 	}
 	
 }

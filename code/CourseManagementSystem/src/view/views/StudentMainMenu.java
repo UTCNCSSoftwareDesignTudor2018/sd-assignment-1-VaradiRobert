@@ -33,8 +33,9 @@ public class StudentMainMenu extends View {
 			public void actionPerformed(ActionEvent ae) {
 				Response response = getObserver().execute(new StudentLogoutCommand());
 				View nextView = ViewFactory.createView(response);
-				nextView.setObserver(getObserver());
+				Observer obs = getObserver();
 				close();
+				nextView.setObserver(obs);
 			}
 		});
 		viewProfileButton.addActionListener(new ActionListener() {
@@ -42,8 +43,9 @@ public class StudentMainMenu extends View {
 			public void actionPerformed(ActionEvent ae) {
 				Response response = getObserver().execute(new ViewProfileCommand());
 				View nextView = ViewFactory.createView(response);
-				nextView.setObserver(getObserver());
+				Observer obs = getObserver();
 				close();
+				nextView.setObserver(obs);
 			}
 		});
 	}

@@ -31,8 +31,5 @@ public class Exam {
 	public void setCourseId(int courseId) {
 		this.courseId = courseId;
 	}
-	@Override
-	public int hashCode() {
-		return this.getCourse().hashCode();
-	}
+
 }

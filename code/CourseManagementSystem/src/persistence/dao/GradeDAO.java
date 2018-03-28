@@ -26,10 +26,10 @@ public class GradeDAO implements GradeDAOInterface {
 			while(resultSet.next()) {
 				Grade grade = new Grade();
 				try {
-					grade.setValue((int)resultSet.getObject("value"));
+					grade.setValue((double)resultSet.getObject("value"));
 					grade.setCourseId((int)resultSet.getObject("course_id"));
 					grade.setStudentId((int)resultSet.getObject("student_id"));
-					grade.setDate((Date)resultSet.getObject("date"));
+					grade.setDate(resultSet.getDate("date"));
 					grades.add(grade);
 				} catch (SQLException e) {
 					e.printStackTrace();

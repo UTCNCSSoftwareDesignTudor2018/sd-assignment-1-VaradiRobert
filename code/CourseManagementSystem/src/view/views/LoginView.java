@@ -19,8 +19,8 @@ import view.views.factory.ViewFactory;
 public class LoginView extends View {
 	private JButton loginButton = new JButton("Login");
 	private JButton createAccountButton = new JButton("Create Account");
-	private JTextField userNameTextField = new JTextField("nyarwood1y");
-	private JPasswordField passwordField = new JPasswordField("J4UViWlYHZt");
+	private JTextField userNameTextField = new JTextField("mverbrugghen1o");
+	private JPasswordField passwordField = new JPasswordField("RsBngCT");
 	private JCheckBox teacherLoginCheckBox = new JCheckBox("Login as teacher");
 	private JButton exitButton = new JButton("Exit");
 	public LoginView() {
@@ -40,7 +40,8 @@ public class LoginView extends View {
 		setActionListeners();
 	}
 	
-	private void setActionListeners() {		setLoginButtonListener();
+	private void setActionListeners() {		
+		setLoginButtonListener();
 		setCreateAccountButtonListener();
 		setExitButtonListener();
 	}
@@ -59,8 +60,9 @@ public class LoginView extends View {
 				if(nextView == null) {
 					System.err.println("NULL");
 				}
-				nextView.setObserver(getObserver());
+				Observer obs = getObserver();
 				close();
+				nextView.setObserver(obs);
 			}
 		});
 	}

@@ -17,13 +17,16 @@ import javax.swing.table.AbstractTableModel;
 
 import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
+import persistence.domain_model.Exam;
+import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Student;
 import service.response.Response;
 import utilities.Observer;
-import view.commands.StudentLogoutCommand;
 import view.commands.SendEnrollmentRequestCommand;
+import view.commands.StudentLogoutCommand;
 import view.commands.UnenrollFromCourseCommand;
+import view.commands.UpdateProfileCommand;
 import view.views.factory.ViewFactory;
 
 @SuppressWarnings("serial")
@@ -33,6 +36,8 @@ public class StudentProfileView extends View {
 	private JPanel coursesPanel = new JPanel();
 	private JPanel groupPanel = new JPanel();
 	private JPanel enrollmentPanel = new JPanel();
+	private JPanel examPanel = new JPanel();
+	private JPanel gradePanel = new JPanel();
 	class TabbedPane extends JPanel {
 		private JButton logoutButton = new JButton("Logout");
 		public TabbedPane() {
@@ -59,24 +64,54 @@ public class StudentProfileView extends View {
 	}
 	
 	class ProfilePanel extends TabbedPane {
+		private JButton updateButton = new JButton("Update Profile");
+		private JPasswordField passwordField;
+		private JPasswordField passwordAgainField;
+		private JTextField emailTextField;
+		private JTextField firstNameTextField;
+		private JTextField lastNameTextField;
+		private JTextField phoneTextField;
+		private JTextField addressTextField;
 		public ProfilePanel(Student student) {
 			super();
+			passwordField = new JPasswordField(student.getPassword());
+			passwordAgainField = new JPasswordField(student.getPassword());
+			emailTextField = new JTextField(student.getEmail());
+			firstNameTextField = new JTextField(student.getFirstName());
+			lastNameTextField = new JTextField(student.getLastName());
+			phoneTextField = new JTextField(student.getPhone());
+			addressTextField = new JTextField(student.getAddress());
 			putComponent(new JLabel("User Name: "), LABEL_X_POS, 10, LABEL_WIDTH, LABEL_HEIGHT);
 			putComponent(new JLabel(student.getUserName()), LABEL_X_POS + LABEL_WIDTH + 10, 10, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 			putComponent(new JLabel("Password: "), LABEL_X_POS, 40, LABEL_WIDTH, LABEL_HEIGHT);
-			putComponent(new JPasswordField(student.getPassword()), LABEL_X_POS + LABEL_WIDTH + 10, 40, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+			putComponent(passwordField, LABEL_X_POS + LABEL_WIDTH + 10, 40, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 			putComponent(new JLabel("Password Again: "), LABEL_X_POS, 70, LABEL_WIDTH, LABEL_HEIGHT);
-			putComponent(new JPasswordField(student.getPassword()), LABEL_X_POS + LABEL_WIDTH + 10, 70, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+			putComponent(passwordAgainField, LABEL_X_POS + LABEL_WIDTH + 10, 70, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 			putComponent(new JLabel("Email: "), LABEL_X_POS, 100, LABEL_WIDTH, LABEL_HEIGHT);
-			putComponent(new JTextField(student.getEmail()), LABEL_X_POS + LABEL_WIDTH + 10, 100, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+			putComponent(emailTextField, LABEL_X_POS + LABEL_WIDTH + 10, 100, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 			putComponent(new JLabel("First Name: "), LABEL_X_POS, 130, LABEL_WIDTH, LABEL_HEIGHT);
-			putComponent(new JTextField(student.getFirstName()), LABEL_X_POS + LABEL_WIDTH + 10, 130, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+			putComponent(firstNameTextField, LABEL_X_POS + LABEL_WIDTH + 10, 130, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 			putComponent(new JLabel("Last Name: "), LABEL_X_POS, 160, LABEL_WIDTH, LABEL_HEIGHT);
-			putComponent(new JTextField(student.getLastName()), LABEL_X_POS + LABEL_WIDTH + 10, 160, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+			putComponent(lastNameTextField, LABEL_X_POS + LABEL_WIDTH + 10, 160, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 			putComponent(new JLabel("Phone: "), LABEL_X_POS, 190, LABEL_WIDTH, LABEL_HEIGHT);
-			putComponent(new JTextField(student.getPhone()), LABEL_X_POS + LABEL_WIDTH + 10, 190, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+			putComponent(phoneTextField, LABEL_X_POS + LABEL_WIDTH + 10, 190, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 			putComponent(new JLabel("Address: "), LABEL_X_POS, 220, LABEL_WIDTH, LABEL_HEIGHT);
-			putComponent(new JTextField(student.getAddress()), LABEL_X_POS + LABEL_WIDTH + 10, 220, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+			putComponent(addressTextField, LABEL_X_POS + LABEL_WIDTH + 10, 220, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+			putComponent(updateButton, 50, 250, 300, 25);
+			setUpdateButtonListener();
+		}
+		
+		private void setUpdateButtonListener() {
+			updateButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent ae) {
+					Response response = getObserver().execute(new UpdateProfileCommand(new String(passwordField.getPassword()), new String(passwordAgainField.getPassword()), emailTextField.getText(), firstNameTextField.getText(), lastNameTextField.getText(), phoneTextField.getText(), addressTextField.getText()));
+					View nextView = ViewFactory.createView(response);
+					Observer obs = getObserver();
+					close();
+					nextView.setObserver(obs);
+				}
+			});
 		}
 	}
 	
@@ -136,8 +171,9 @@ public class StudentProfileView extends View {
 						String courseName = enrollmentsTable.getValueAt(selectedRowNumber, 0).toString();
 						Response response = getObserver().execute(new UnenrollFromCourseCommand(courseName));
 						View nextView = ViewFactory.createView(response);
-						nextView.setObserver(getObserver());
+						Observer obs = getObserver();
 						close();
+						nextView.setObserver(obs);
 					}
 				});
 			}
@@ -156,8 +192,9 @@ public class StudentProfileView extends View {
 						String courseName = enrollmentsTable.getValueAt(selectedRowNumber, 0).toString();
 						Response response = getObserver().execute(new SendEnrollmentRequestCommand(courseName));
 						View nextView = ViewFactory.createView(response);
-						nextView.setObserver(getObserver());
+						Observer obs = getObserver();
 						close();
+						nextView.setObserver(obs);
 					}
 				});
 			}
@@ -213,8 +250,9 @@ public class StudentProfileView extends View {
 				public void actionPerformed(ActionEvent ae) {
 					Response response = getObserver().execute(new StudentLogoutCommand());
 					View nextView = ViewFactory.createView(response);
-					nextView.setObserver(getObserver());
+					Observer obs = getObserver();
 					close();
+					nextView.setObserver(obs);
 				}
 			});
 		}
@@ -266,24 +304,111 @@ public class StudentProfileView extends View {
 		}
 	}
 	
-	public StudentProfileView(Student student, List<Course> courses, List<Enrollment> enrollments, Group group) {
-		this(student, courses, enrollments, group, null); 
+	class GradePanel extends TabbedPane {
+		class GradeTableModel extends AbstractTableModel {
+			private Object[][] data;
+			private String[] columnNames = {"Course", "Date", "Mark"};
+			public GradeTableModel(List<Grade> grades) {
+				int rowCount = grades.size();
+				data = new Object[rowCount][columnNames.length];
+				for(int i = 0; i < rowCount; i++) {
+					data[i][0] = grades.get(i).getCourse().getName();
+					data[i][1] = grades.get(i).getDate().toString();
+					data[i][2] = (grades.get(i).getValue() == -1) ? "Not Recorded" : grades.get(i).getValue();
+				}
+			}
+			
+			@Override
+			public int getColumnCount() {
+				return columnNames.length;
+			}
+
+			@Override
+			public int getRowCount() {
+				return data.length;
+			}
+
+			@Override
+			public Object getValueAt(int row, int col) {
+				return data[row][col];
+			}
+		}
+		
+		private JTable gradeTable;
+		
+		public GradePanel(List<Grade> grades) {
+			super();
+			GradeTableModel gtm = new GradeTableModel(grades);
+			gradeTable = new JTable(gtm.data, gtm.columnNames);
+			JScrollPane scrollPane = new JScrollPane(gradeTable);
+			gradeTable.setFillsViewportHeight(true);
+			putComponent(scrollPane, 10, 40, 700, 800);
+		}
 	}
 	
-	public StudentProfileView(Student student, List<Course> courses, List<Enrollment> enrollments, Group group, Observer observer) {
+	class ExamPanel extends TabbedPane {
+		class ExamTableModel extends AbstractTableModel {
+			private Object[][] data;
+			private String[] columnNames = {"Course", "Date"};
+			public ExamTableModel(List<Exam> exams) {
+				int rowCount = exams.size();
+				data = new Object[rowCount][columnNames.length];
+				for(int i = 0; i < rowCount; i++) {
+					data[i][0] = exams.get(i).getCourse().getName();
+					data[i][1] = exams.get(i).getDate().toString();
+				}
+			}
+			
+			@Override
+			public int getColumnCount() {
+				return columnNames.length;
+			}
+
+			@Override
+			public int getRowCount() {
+				return data.length;
+			}
+
+			@Override
+			public Object getValueAt(int row, int col) {
+				return data[row][col];
+			}
+		}
+		
+		private JTable examTable;
+		
+		public ExamPanel(List<Exam> exams) {
+			super();
+			ExamTableModel etm = new ExamTableModel(exams);
+			examTable = new JTable(etm.data, etm.columnNames);
+			JScrollPane scrollPane = new JScrollPane(examTable);
+			examTable.setFillsViewportHeight(true);
+			putComponent(scrollPane, 10, 40, 700, 800);
+		}
+	}
+	
+	public StudentProfileView(Student student, List<Course> courses, List<Enrollment> enrollments, Group group, List<Grade> grades, List<Exam> exams) {
+		this(student, courses, enrollments, group, grades, exams, null); 
+	}
+	
+	public StudentProfileView(Student student, List<Course> courses, List<Enrollment> enrollments, Group group, List<Grade> grades, List<Exam> exams, Observer observer) {
 		super("Profile", 10, 10, 1000, 1000, observer);
-		initializeTabbedPane(student, courses, enrollments, group);
+		initializeTabbedPane(student, courses, enrollments, group, grades, exams);
 		put(tabbedPane, 0, 0, this.getBounds().width, this.getBounds().height);
 	}
 	
-	private void initializeTabbedPane(Student student, List<Course> courses, List<Enrollment> enrollments, Group group) {
+	private void initializeTabbedPane(Student student, List<Course> courses, List<Enrollment> enrollments, Group group, List<Grade> grades, List<Exam> exams) {
 		profilePanel = new ProfilePanel(student);
 		coursesPanel = new CoursePanel(courses);
 		enrollmentPanel = new EnrollmentsPanel(enrollments);
 		groupPanel = new GroupPanel(group);
+		examPanel = new ExamPanel(exams);
+		gradePanel = new GradePanel(grades);
 		tabbedPane.addTab("Profile", profilePanel);
 		tabbedPane.addTab("Courses", coursesPanel);
 		tabbedPane.addTab("Group", groupPanel);
 		tabbedPane.addTab("Enrollments", enrollmentPanel);
+		tabbedPane.addTab("Exams", examPanel);
+		tabbedPane.addTab("Grades", gradePanel);
 	}
 }
