@@ -21,6 +21,7 @@ import persistence.domain_model.Student;
 import persistence.domain_model.Teacher;
 import service.response.Response;
 import utilities.Observer;
+import view.commands.RemoveStudentFromCourseCommand;
 import view.commands.TeacherLogoutCommand;
 import view.views.factory.ViewFactory;
 
@@ -32,7 +33,7 @@ public class TeacherMainMenu extends View {
 		public TabbedPane() {
 			this.setLayout(null);
 			this.setVisible(true);
-			putComponent(logoutButton, 10, 830, 300, 25);
+			putComponent(logoutButton, 10, 850, 300, 25);
 		}
 		public void putComponent(JComponent component, int xPos, int yPos, int width, int height) {
 			this.add(component);
@@ -118,6 +119,69 @@ public class TeacherMainMenu extends View {
 		}
 	}
 	
+	class CoursePanel extends TabbedPane {
+		class CourseTableModel extends AbstractTableModel {
+			private Object[][] data;
+			private String[] columnNames = {"Full Name", "Email", "User Name", "Phone", "Address"};
+			public CourseTableModel(Course course) {
+				int rowCount = course.getEnrolledStudents().size();
+				List<Student> students = course.getEnrolledStudents();
+				data = new Object[rowCount][columnNames.length];
+				for(int i = 0; i < rowCount; i++) {
+					data[i][0] = students.get(i).getFirstName() + " " + students.get(i).getLastName();
+					data[i][1] = students.get(i).getEmail();
+					data[i][2] = students.get(i).getUserName();
+					data[i][3] = students.get(i).getPhone();
+					data[i][4] = students.get(i).getAddress();
+				}
+			}
+			
+			@Override
+			public int getColumnCount() {
+				return columnNames.length;
+			}
+
+			@Override
+			public int getRowCount() {
+				return data.length;
+			}
+
+			@Override
+			public Object getValueAt(int row, int col) {
+				return data[row][col];
+			}
+		}
+		private String courseName;
+		private JTable groupTable;
+		private JButton deleteStudentButton = new JButton("Remove from course");
+		private void setDeleteStudentButtonListener() {
+			deleteStudentButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent ae) {
+					int selectedRow = groupTable.getSelectedRow();
+					String userName = groupTable.getValueAt(selectedRow, 2).toString();
+					Response response = getObserver().execute(new RemoveStudentFromCourseCommand(userName, courseName));
+					View nextView = ViewFactory.createView(response);
+					Observer observer = getObserver();
+					close();
+					nextView.setObserver(observer);
+				}
+			});
+		}
+		public CoursePanel(Course course) {
+			super();
+			this.courseName = course.getName();
+			CourseTableModel gtm = new CourseTableModel(course);
+			groupTable = new JTable(gtm.data, gtm.columnNames);
+			JScrollPane scrollPane = new JScrollPane(groupTable);
+			groupTable.setFillsViewportHeight(true);
+			putComponent(scrollPane, 10, 40, 700, 800);
+			putComponent(deleteStudentButton, 400, 900, 300, 25);
+			tabbedPane.addTab(course.getName(), this);
+			setDeleteStudentButtonListener();
+		}
+	}
+	
 	public TeacherMainMenu(Teacher teacher, List<Group> groups, List<Course> courses) {
 		this(teacher, groups, courses, null);
 	}
@@ -127,6 +191,9 @@ public class TeacherMainMenu extends View {
 		put(tabbedPane, 0, 0, this.getBounds().width, this.getBounds().height);
 		for(Group group : groups) {
 			new GroupPanel(group);
+		}
+		for(Course course : courses) {
+			new CoursePanel(course);
 		}
 	}
 	

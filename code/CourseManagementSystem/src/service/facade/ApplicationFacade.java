@@ -8,6 +8,7 @@ import service.response.StudentMainMenuResponse;
 import utilities.Observer;
 import view.commands.CancelEnrollmentCommand;
 import view.commands.CreateProfileCommand;
+import view.commands.RemoveStudentFromCourseCommand;
 import view.commands.SendEnrollmentRequestCommand;
 import view.commands.StudentLoginCommand;
 import view.commands.StudentLogoutCommand;
@@ -78,6 +79,11 @@ public class ApplicationFacade implements Observer {
 
 	public Response execute(CancelEnrollmentCommand command) {
 		Response response = studentController.cancelEnrollment(command);
+		return response;
+	}
+
+	public Response execute(RemoveStudentFromCourseCommand command) {
+		Response response = teacherController.deleteStudentFromCourse(command);
 		return response;
 	}
 	

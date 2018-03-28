@@ -236,10 +236,9 @@ public class StudentBLL implements StudentInterface {
 
 	@Override
 	public List<Student> getByEnrollments(List<Enrollment> enrollments) {
-		StudentInterface studentBLL = new StudentBLL();
 		List<Student> students = new ArrayList<Student>();
 		for(Enrollment e : enrollments) {
-			students.add(studentBLL.getStudentById(e.getStudentId()));
+			students.add(getStudentById(e.getStudentId()));
 		}
 		return students;
 	}
@@ -250,8 +249,6 @@ public class StudentBLL implements StudentInterface {
 		CourseInterface courseBLL = new CourseBLL();
 		Course course = courseBLL.getCourseByName(courseName);
 		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
-		System.err.println(student == null);
-		System.err.println(course == null);
 		enrollmentBLL.cancelEnrollment(student.getIdentityCardNumber(), course.getId());
 	}
 }

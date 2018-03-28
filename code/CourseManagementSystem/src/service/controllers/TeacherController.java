@@ -25,7 +25,6 @@ public class TeacherController {
 	
 	public boolean login(TeacherLoginCommand command) {
 		boolean loggedIn = teacherBLL.login(command.getUserName(), command.getPassword());
-		System.err.println("TEACHER LOG IN");
 		loggedInUserName = command.getUserName();
 		return loggedIn;
 	}
@@ -59,5 +58,17 @@ public class TeacherController {
 
 	public void logout() {
 		loggedInUserName = "";
+	}
+
+	public Response deleteStudentFromCourse(RemoveStudentFromCourseCommand command) {
+		teacherBLL.removeStudentFromCourse(command.getStudentName(), command.getCourseName());
+		Teacher teacher = teacherBLL.getTeacherByUserName(loggedInUserName);
+		List<Group> groups = teacherBLL.getAllGroups();
+		List<Course> courses = teacherBLL.getTaughtCourses(loggedInUserName);
+		TeacherMainMenuResponse response = new TeacherMainMenuResponse();
+		response.setTeacher(teacher);
+		response.setGroups(groups);
+		response.setCourses(courses);
+		return response;
 	}
 }

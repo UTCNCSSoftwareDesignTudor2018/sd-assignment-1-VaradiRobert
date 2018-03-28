@@ -37,7 +37,7 @@ public class TeacherBLL implements TeacherInterface {
 		CourseInterface courseBLL = new CourseBLL();
 		Course course = courseBLL.getCourseByName(courseName);
 		Student student = studentBLL.getStudentByUserName(studentName);
-		enrollmentBLL.unenrollStudent(student.getIdentityCardNumber(), course.getId());
+		enrollmentBLL.removeStudent(student.getIdentityCardNumber(), course.getId());
 	}
 
 	@Override

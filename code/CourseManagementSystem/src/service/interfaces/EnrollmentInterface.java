@@ -13,4 +13,5 @@ public interface EnrollmentInterface {
 	public void declineEnrollment(int identityCardNumber, int id);
 	public void saveEnrollment(Enrollment enrollment);
 	public void cancelEnrollment(int identityCardNumber, int id);
+	public void removeStudent(int identityCardNumber, int id);
 }

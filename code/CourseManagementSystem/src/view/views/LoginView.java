@@ -19,8 +19,8 @@ import view.views.factory.ViewFactory;
 public class LoginView extends View {
 	private JButton loginButton = new JButton("Login");
 	private JButton createAccountButton = new JButton("Create Account");
-	private JTextField userNameTextField = new JTextField("mverbrugghen1o");
-	private JPasswordField passwordField = new JPasswordField("RsBngCT");
+	private JTextField userNameTextField = new JTextField("rdunrige6");
+	private JPasswordField passwordField = new JPasswordField("i2q7mxK9kCxL");
 	private JCheckBox teacherLoginCheckBox = new JCheckBox("Login as teacher");
 	private JButton exitButton = new JButton("Exit");
 	public LoginView() {

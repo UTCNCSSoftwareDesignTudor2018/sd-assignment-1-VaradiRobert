@@ -85,4 +85,11 @@ public class EnrollmentBLL implements EnrollmentInterface {
 		enrollmentDAO.updateEnrollment(enrollment);
 	}
 
+	@Override
+	public void removeStudent(int identityCardNumber, int id) {
+		Enrollment enrollment = enrollmentDAO.findByStudentAndCourseIds(identityCardNumber, id);
+		enrollment.setStatus(STATUS_DELETED);
+		enrollmentDAO.updateEnrollment(enrollment);
+	}
+
 }
