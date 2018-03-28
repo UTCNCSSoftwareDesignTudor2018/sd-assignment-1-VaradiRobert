@@ -1,50 +1,29 @@
 package business.business_logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import business.interfaces.ExamDAOInterface;
 import persistence.dao.ExamDAO;
-import persistence.domain_model.Course;
 import persistence.domain_model.Exam;
-import persistence.domain_model.Teacher;
+import service.interfaces.CourseInterface;
+import service.interfaces.ExamInterface;
 
-public class ExamBLL {
-	private ExamDAO examDAO;
-	private CourseBLL courseBLL;
-	private TeacherBLL teacherBLL;
+public class ExamBLL implements ExamInterface {
+	private ExamDAOInterface examDAO;
+	private CourseInterface courseBLL;
 	public ExamBLL() {
 		this.examDAO = new ExamDAO();
-		this.courseBLL = new CourseBLL();
-		this.teacherBLL = new TeacherBLL();
 	}
 	
+	@Override
 	public Exam getExam(int examId) {
-		List<Exam> exams = examDAO.getAllObjectsWhere(e -> ((Exam)e).getId() == examId);
-		Exam e = exams.get(0);
-		e.setCourse(courseBLL.getCourseById(e.getCourseId()));
-		e.setTeacher(teacherBLL.getTeacherById(e.getTeacherId()));
-		return e;
+		Exam exam = examDAO.getExamById(examId);
+		exam.setCourse(courseBLL.getCourse(exam.getCourseId()));
+		return exam;
 	}
-	
-	public Exam getExam(Course course, Teacher teacher) {
-		return examDAO.getAllObjectsWhere(e -> ((Exam)e).getCourseId() == course.getId() && ((Exam)e).getTeacherId() == teacher.getId()).get(0);
-	}
-	
-	public List<Course> getCourses(Teacher teacher) {
-		List<Exam> exams = examDAO.getAllObjectsWhere(e -> ((Exam)e).getTeacherId() == teacher.getId());
-		List<Course> courses = new ArrayList<Course>();
-		for(Exam e : exams) {
-			courses.add(courseBLL.getCourseById(e.getCourseId()));
-		}
-		return courses;
-	}
-	
-	public List<Exam> getExams(Teacher teacher) {
-		List<Exam> exams = examDAO.getAllObjectsWhere(e -> ((Exam)e).getTeacherId() == teacher.getId());
-		for(Exam e : exams) {
-			e.setCourse(courseBLL.getCourseById(e.getCourseId()));
-			e.setTeacher(teacher);
-		}
-		return exams;
+
+	@Override
+	public Exam getExamByCourseId(int courseId) {
+		Exam exam = examDAO.getByCourseId(courseId);
+		exam.setCourse(courseBLL.getCourse(courseId));
+		return exam;
 	}
 }

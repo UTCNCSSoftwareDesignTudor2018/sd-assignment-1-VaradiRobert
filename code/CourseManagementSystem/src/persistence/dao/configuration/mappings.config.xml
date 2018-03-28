@@ -10,7 +10,7 @@
     <field name="phone" column="phone"/>
   </mapping>
   <mapping model="Student" table="`course_management`.`student`">
-    <primary-key name="indentityCardNumber" column="identity_card_number"/>
+    <primary-key name="identityCardNumber" column="identity_card_number"/>
     <field name="personalNumericalCode" column="personal_numerical_code"/>
     <field name="userName" column="user_name"/>
     <field name="password" column="password"/>
@@ -18,5 +18,34 @@
     <field name="firstName" column="first_name"/>
     <field name="lastName" column="last_name"/>
     <field name="phone" column="phone"/>
+    <field name="groupId" column="group_id"/>
+    <field name="address" column="address"/>
+  </mapping>
+  <mapping model="Course" table="`course_management`.`course`">
+    <primary-key name="id" column="id"/>
+    <field name="name" column="name"/>
+    <field name="credits" column="credits"/>
+  </mapping>
+  <mapping model="Group" table="`course_management`.`group`">
+    <primary-key name="id" column="id"/>
+    <field name="number" column="group_number"/>
+  </mapping>
+  <mapping model="Exam" table="`course_management`.`exam`">
+    <primary-key name="id" column="id"/>
+    <field name="courseId" column="course_id"/>
+    <field name="date" column="date"/>
+  </mapping>
+  <mapping model="Enrollment" table="`course_management`.`enrollment`">
+    <primary-key name="id" column="id"/>
+    <field name="courseId" column="course_id"/>
+    <field name="studentId" column="student_id"/>
+    <field name="status" column="enrollment_status"/>
+  </mapping>
+  <mapping model="Grade" table="`course_management`.`grade`">
+    <primary-key name="id" column="id"/>
+    <field name="value" column="value"/>
+    <field name="examId" column="exam_id"/>
+    <field name="date" column="date"/>
+    <field name="studentId" column="student_id"/>
   </mapping>
 </mappings>

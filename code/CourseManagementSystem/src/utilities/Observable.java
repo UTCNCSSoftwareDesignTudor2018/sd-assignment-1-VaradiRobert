@@ -8,4 +8,7 @@ public class Observable {
 	public Observer getObserver() {
 		return observer;
 	}
+	public void setObserver(Observer observer) {
+		this.observer = observer;
+	}
 }

@@ -1,11 +1,10 @@
 package business.business_logic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
+import business.interfaces.StudentDAOInterface;
 import business.security.PasswordEncrypter;
 import business.validators.Validator;
 import business.validators.student.StudentEmailValidator;
@@ -21,35 +20,29 @@ import persistence.domain_model.Exam;
 import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Student;
-import persistence.domain_model.Teacher;
+import service.interfaces.CourseInterface;
+import service.interfaces.EnrollmentInterface;
+import service.interfaces.ExamInterface;
+import service.interfaces.GradeInterface;
+import service.interfaces.GroupInterface;
 import service.interfaces.StudentInterface;
 
 public class StudentBLL implements StudentInterface {
-	private PasswordEncrypter pe;
-	private StudentDAO studentDAO;
-	private GroupBLL groupBLL;
-	///private EnrollmentBLL enrollmentBLL;
-	private GradeBLL gradeBLL;
 	private List<Validator<Student>> validators;
-	private static int recordCount = 0;
-	
+	private StudentDAOInterface studentDAO;
 	private String generatePersonalNumericalCode() {
 		String uniqueId = UUID.randomUUID().toString();
 		String personalNumericalCode = "";
 		int length = uniqueId.length();
 		for(int i = 0; i < length; i++) {
-			if(!"abcedfghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(uniqueId.substring(i, 1))) {
+			if(!"abcedfghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(new String(new char[] {uniqueId.charAt(i)}))) {
 				personalNumericalCode += uniqueId.charAt(i);
 			}
 		}
 		return personalNumericalCode;
 	}
 	
-	public StudentBLL() {
-		this.studentDAO = new StudentDAO();
-		this.groupBLL = new GroupBLL();
-		//this.enrollmentBLL = new EnrollmentBLL();
-		this.gradeBLL = new GradeBLL();
+	private void setValidators() {
 		validators = new ArrayList<Validator<Student>>();
 		validators.add(new StudentUserNameValidator());
 		validators.add(new StudentPasswordValidator());
@@ -57,6 +50,11 @@ public class StudentBLL implements StudentInterface {
 		validators.add(new StudentFirstNameValidator());
 		validators.add(new StudentLastNameValidator());
 		validators.add(new StudentPhoneValidator());
+	}
+	
+	public StudentBLL() {
+		this.studentDAO = new StudentDAO();
+		setValidators();
 	}
 	
 	private void validate(Student student) {
@@ -68,6 +66,7 @@ public class StudentBLL implements StudentInterface {
 	@Override
 	public void createProfile(String userName, String password, String passwordAgain, String email, String firstName,
 			String lastName, String phone, String address) {
+		PasswordEncrypter pe = new PasswordEncrypter();
 		Student student = new Student();
 		student.setUserName(userName);
 		if(password.equals(passwordAgain)) {
@@ -80,108 +79,53 @@ public class StudentBLL implements StudentInterface {
 		student.setLastName(lastName);
 		student.setPhone(phone);
 		student.setAddress(address);
+		student.setGroupId(1);
 		validate(student);
 		student.setPersonalNumericalCode(generatePersonalNumericalCode());
-		student.setIdentityCardNumber(recordCount + 1);
-		
-	}
-
-	@Override
-	public Student viewProfile(String userName) {
-		return getStudentByUserName(userName);
-	}
-
-	@Override
-	public void sendEnrollmentRequest(String userName, String courseName, String teacherName) {
-		// TODO
-		Student student = getStudentByUserName(userName);
-		///enrollmentBLL.enrollStudent(student, courseName);
-	}
-
-	@Override
-	public void unenrollFromCourse(String userName, String courseName, String teacherName) {
-		// TODO
-		Student student = getStudentByUserName(userName);
-		///enrollmentBLL.unenrollStudent(student, courseName);
-	}
-
-	@Override
-	public Group viewGroup(String userName) {
-		Student student = getStudentByUserName(userName);
-		if(student == null) {
-			return null;
+		student.setIdentityCardNumber(studentDAO.getRecordCount() + 1);
+		GroupInterface groupBLL = new GroupBLL();
+		List<Group> groups = groupBLL.getAll();
+		for(Group group : groups) {
+			group.setStudents(studentDAO.findAllByGroupId(group.getId()));
 		}
-		Group group = groupBLL.getGroupById(student.getGroupId());
-		return group;
+		int groupIdToEnroll = 1;
+		int minimumStudentCount = groups.get(0).getStudents().size();
+		int numberOfGroups = groups.size();
+		for(int i = 1; i < numberOfGroups; i++) {
+			int studentCount = groups.get(i).getStudents().size();
+			if(studentCount < minimumStudentCount) {
+				minimumStudentCount = studentCount;
+				groupIdToEnroll = groups.get(i).getId();
+			}
+		}
+		student.setGroupId(groupIdToEnroll);
+		studentDAO.createStudent(student);;		
+	}
+
+	@Override
+	public Student getProfile(String userName) {
+		return studentDAO.findByUserName(userName);
 	}
 
 	@Override
 	public boolean login(String userName, String password) {
-		List<Student> students = studentDAO.getAllObjectsWhere(s -> ((Student)s).getUserName().equals(userName) && pe.match(password, ((Student)s).getPassword()));
-		return students.size() > 0;
-	}
-
-	@Override
-	public List<Exam> getExams(String userName) {
-		List<Grade> grades = getGrades(userName);
-		List<Exam> exams = new ArrayList<Exam>();
-		for(Grade g : grades) {
-			exams.add(g.getExam());
+		PasswordEncrypter pe = new PasswordEncrypter();
+		Student student = studentDAO.findByUserName(userName);
+		if(student == null) {
+			return false;
 		}
-		return exams;
-	}
-
-	@Override
-	public List<Course> getCourses(String userName) {
-		List<Exam> exams = getExams(userName);
-		List<Course> courses = new ArrayList<Course>();
-		for(Exam e : exams) {
-			courses.add(e.getCourse());
+		if(pe.match(password, student.getPassword())) {
+			return true;
 		}
-		return courses;
-	}
-
-	@Override
-	public Map<Course, Teacher> getTeachers(String userName) {
-		List<Exam> exams = getExams(userName);
-		Map<Course, Teacher> teachers = new HashMap<Course, Teacher>();
-		for(Exam e : exams) {
-			teachers.put(e.getCourse(), e.getTeacher());
-		}
-		return teachers;
-	}
-
-	@Override
-	public List<Enrollment> getEnrollments(String userName) {
-		Student student = getStudentByUserName(userName);
-		//List<Enrollment> enrollments = enrollmentBLL.getEnrollmentsForStudent(student);
-		return null;
-	}
-	
-	@Override
-	public List<Grade> getGrades(String userName) {
-		Student student = getStudentByUserName(userName);
-		List<Grade> grades = gradeBLL.getGrades(student);
-		return grades;
-	}
-	
-	public Student getStudentByUserName(String userName) {
-		List<Student> students = studentDAO.getAllObjectsWhere(s -> ((Student)s).getUserName().equals(userName));
-		if(students.size() > 0) {
-			return students.get(0);
-		} else {
-			return null;
-		}
+		return false;
 	}
 
 	@Override
 	public void updateProfile(String userName, String password, String passwordAgain, String email, String firstName,
 			String lastName, String phone, String address) {
-		Student student = getStudentByUserName(userName);
-		if(password.equals(passwordAgain)) {
-			student.setPassword(pe.encrypt(password));
-		} else {
-			throw new IllegalArgumentException("Password confirmation exception!");
+		Student student = studentDAO.findByUserName(userName);
+		if(password.equals(passwordAgain) && !password.equals("")) {
+			student.setPassword(password);
 		}
 		student.setEmail(email);
 		student.setFirstName(firstName);
@@ -189,18 +133,82 @@ public class StudentBLL implements StudentInterface {
 		student.setPhone(phone);
 		student.setAddress(address);
 		validate(student);
-		studentDAO.updateObject(student);
+		studentDAO.updateStudent(student);
 	}
-	
-	public List<Student> getStudents(List<Enrollment> enrollments) {
-		List<Student> students = studentDAO.getAllObjectsWhere(s -> {
-			for(Enrollment e : enrollments) {
-				if(((Student)s).getIdentityCardNumber() == e.getStudentId()) {
-					return true;
-				}
-			}
-			return false;
-		});
-		return students;
+
+	@Override
+	public void sendEnrollmentRequest(String userName, String courseName) {
+		
 	}
+
+	@Override
+	public void unenrollFromCourse(String userName, String courseName) {
+		System.err.println(userName);
+		Student student = studentDAO.findByUserName(userName);
+		CourseInterface courseBLL = new CourseBLL();
+		Course course = courseBLL.getCourseByName(courseName);
+		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
+		System.err.println(student == null);
+		System.err.println(course == null);
+		enrollmentBLL.unenrollStudent(student.getIdentityCardNumber(), course.getId());
+	}
+
+	@Override
+	public Group getGroup(String userName) {
+		Student student = studentDAO.findByUserName(userName);
+		GroupInterface groupBLL = new GroupBLL();
+		Group group = groupBLL.getByGroupId(student.getGroupId());
+		group.setStudents(studentDAO.findAllByGroupId(group.getId()));
+		return group;
+	}
+
+	@Override
+	public List<Exam> getExams(String userName) {
+		ExamInterface examBLL = new ExamBLL();
+		List<Enrollment> enrollments = getEnrollments(userName);
+		List<Exam> exams = new ArrayList<Exam>();
+		for(Enrollment enrollment : enrollments) {
+			exams.add(examBLL.getExamByCourseId(enrollment.getCourseId()));
+		}
+		return exams;
+	}
+
+	@Override
+	public List<Course> getCourses(String userName) {
+		List<Enrollment> enrollments = getEnrollments(userName);
+		List<Course> courses = new ArrayList<Course>();
+		for(Enrollment enrollment : enrollments) {
+			courses.add(enrollment.getCourse());
+		}
+		return courses;
+	}
+
+	@Override
+	public List<Grade> getGrades(String userName) {
+		Student student = studentDAO.findByUserName(userName);
+		GradeInterface gradeBLL = new GradeBLL();
+		List<Grade> grades = gradeBLL.getGradesByStudentId(student.getIdentityCardNumber());
+		return grades;
+	}
+
+	@Override
+	public List<Enrollment> getEnrollments(String userName) {
+		Student student = studentDAO.findByUserName(userName);
+		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
+		List<Enrollment> enrollments = enrollmentBLL.getEnrollments(student.getIdentityCardNumber());
+		return enrollments;
+	}
+
+	@Override
+	public Student getStudentByUserName(String studentName) {
+		Student student = studentDAO.findByUserName(studentName);
+		return student;
+	}
+
+	@Override
+	public List<Student> getStudentsByGroupId(int groupId) {
+		return studentDAO.findAllByGroupId(groupId);
+	}
+
+
 }

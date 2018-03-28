@@ -6,6 +6,8 @@ public class Course {
 	private int id;
 	private String name;
 	private int credits;
+	private int teacherId;
+	private Teacher teacher;
 	private List<Student> enrolledStudents;
 	public String getName() {
 		return name;
@@ -31,8 +33,21 @@ public class Course {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+	public Teacher getTeacher() {
+		return teacher;
+	}
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+	public int getTeacherId() {
+		return teacherId;
+	}
+	public void setTeacherId(int teacherId) {
+		this.teacherId = teacherId;
 	}
 }

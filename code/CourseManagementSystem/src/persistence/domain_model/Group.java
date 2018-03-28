@@ -1,21 +1,21 @@
 package persistence.domain_model;
 
-import java.util.Map;
+import java.util.List;
 
 public class Group {
 	private int id;
 	private int number;
-	private Map<String, Student> students;
+	private List<Student> students;
 	public int getNumber() {
 		return number;
 	}
 	public void setNumber(int number) {
 		this.number = number;
 	}
-	public Map<String, Student> getStudents() {
+	public List<Student> getStudents() {
 		return students;
 	}
-	public void setStudents(Map<String, Student> students) {
+	public void setStudents(List<Student> students) {
 		this.students = students;
 	}
 	public int getId() {

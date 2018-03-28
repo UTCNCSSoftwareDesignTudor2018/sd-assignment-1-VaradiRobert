@@ -2,71 +2,50 @@ package business.business_logic;
 
 import java.util.List;
 
+import business.interfaces.EnrollmentDAOInterface;
 import persistence.dao.EnrollmentDAO;
-import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
-import persistence.domain_model.Student;
+import service.interfaces.CourseInterface;
+import service.interfaces.EnrollmentInterface;
 
-public class EnrollmentBLL {
-	private CourseBLL courseBLL;
-	private EnrollmentDAO enrollmentDAO;
-	private StudentBLL studentBLL;
-	private static int recordCount;
-	private static final String STATUS_REQUEST = "Request";
-	private static final String STATUS_ACCEPTED = "Accepted";
-	private static final String STATUS_DECLINED = "Declined";
-	private static final String STATUS_DELETED = "Deleted";
+public class EnrollmentBLL implements EnrollmentInterface {
+	private EnrollmentDAOInterface enrollmentDAO;
+	public static final String STATUS_REQUEST = "Request";
+	public static final String STATUS_ACCEPTED = "Accepted";
+	public static final String STATUS_DECLINED = "Declined";
+	public static final String STATUS_DELETED = "Deleted";
 	public EnrollmentBLL() {
-		this.courseBLL = new CourseBLL();
 		this.enrollmentDAO = new EnrollmentDAO();
-		this.studentBLL = new StudentBLL();
-		recordCount = enrollmentDAO.getAllObjects().size();
 	}
-	
-	public void enrollStudent(Student student, String courseName) {
-		Course course = courseBLL.getCourseByName(courseName);
-		Enrollment enrollment = new Enrollment();
-		enrollment.setStudentId(student.getIdentityCardNumber());
-		enrollment.setCourseId(course.getId());
-		enrollment.setId(recordCount + 1);
-		enrollment.setStatus(STATUS_REQUEST);
-		enrollmentDAO.storeObject(enrollment);
-		recordCount++;
-	}
-	
-	public void unenrollStudent(Student student, String courseName) {
-		Course course = courseBLL.getCourseByName(courseName);
-		Enrollment enrollment = enrollmentDAO.getAllObjectsWhere(e -> ((Enrollment)e).getCourseId() == course.getId() && ((Enrollment)e).getStudentId() == student.getIdentityCardNumber()).get(0);
-		enrollment.setStatus(STATUS_DELETED);
-		enrollmentDAO.updateObject(enrollment);
-	}
-	
-	public void declineEnrollment(Student student, String courseName) {
-		Course course = courseBLL.getCourseByName(courseName);
-		Enrollment enrollment = enrollmentDAO.getAllObjectsWhere(e -> ((Enrollment)e).getCourseId() == course.getId()).get(0);
-		enrollment.setStatus(STATUS_DECLINED);
-		enrollmentDAO.updateObject(enrollment);
-	}
-	
-	public void acceptEnrollment(Student student, String courseName) {
-		Course course = courseBLL.getCourseByName(courseName);
-		Enrollment enrollment = enrollmentDAO.getAllObjectsWhere(e -> ((Enrollment)e).getCourseId() == course.getId()).get(0);
-		enrollment.setStatus(STATUS_ACCEPTED);
-		enrollmentDAO.updateObject(enrollment);
-	}
-	
-	public List<Enrollment> getEnrollmentsForStudent(Student student) {
-		List<Enrollment> enrollments = enrollmentDAO.getAllObjectsWhere(e -> ((Enrollment)e).getCourseId() == student.getIdentityCardNumber());
-		for(Enrollment e : enrollments) {
-			e.setCourse(courseBLL.getCourseById(e.getCourseId()));
-			e.setStudent(student);
+
+	@Override
+	public List<Enrollment> getEnrollments(int studentId) {
+		CourseInterface courseBLL = new CourseBLL();
+		List<Enrollment> enrollments = enrollmentDAO.findAllByStudentId(studentId);
+		for(Enrollment enrollment : enrollments) {
+			enrollment.setCourse(courseBLL.getCourse(enrollment.getCourseId()));
 		}
 		return enrollments;
 	}
-	
-	public List<Student> getEnrolledStudents(int courseId) {
-		List<Enrollment> enrollments = enrollmentDAO.getAllObjectsWhere(e -> ((Enrollment)e).getCourseId() == courseId && ((Enrollment)e).getStatus().equals(STATUS_ACCEPTED));
-		List<Student> students = studentBLL.getStudents(enrollments);
-		return students;
+
+	@Override
+	public void unenrollStudent(int studentId, int courseId) {
+		Enrollment enrollment = enrollmentDAO.findByStudentAndCourseIds(studentId, courseId);
+		enrollment.setStatus(STATUS_DELETED);
+		enrollmentDAO.updateEnrollment(enrollment);
+	}
+
+	@Override
+	public void acceptEnrollment(int studentId, int courseId) {
+		Enrollment enrollment = enrollmentDAO.findByStudentAndCourseIds(studentId, courseId);
+		enrollment.setStatus(STATUS_ACCEPTED);
+		enrollmentDAO.updateEnrollment(enrollment);
+	}
+
+	@Override
+	public void acceptStudentEnrollmentRequest(int studentId, int courseId) {
+		Enrollment enrollment = enrollmentDAO.findByStudentAndCourseIds(studentId, courseId);
+		enrollment.setStatus(STATUS_DECLINED);
+		enrollmentDAO.updateEnrollment(enrollment);
 	}
 }

@@ -9,29 +9,78 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import service.facade.ApplicationFacade;
+import service.response.Response;
 import utilities.Observer;
 import view.commands.StudentLoginCommand;
+import view.commands.TeacherLoginCommand;
+import view.views.factory.ViewFactory;
 
 @SuppressWarnings("serial")
 public class LoginView extends View {
-	private JButton loginButton;
-	private JTextField userNameTextField = new JTextField();
-	private JPasswordField passwordField = new JPasswordField();
+	private JButton loginButton = new JButton("Login");
+	private JButton createAccountButton = new JButton("Create Account");
+	private JTextField userNameTextField = new JTextField("nyarwood1y");
+	private JPasswordField passwordField = new JPasswordField("J4UViWlYHZt");
+	private JCheckBox teacherLoginCheckBox = new JCheckBox("Login as teacher");
+	private JButton exitButton = new JButton("Exit");
+	public LoginView() {
+		this(null);
+	}
 	public LoginView(Observer observer) {
-		super("Login", 100, 100, 500, 200, observer);
-		put(new JLabel("User name"), 10, 10, 100, 25);
-		put(new JLabel("Password"), 10, 40, 100, 25);
-		put(userNameTextField, 60, 10, 200, 25);
-		put(passwordField, 60, 40, 200, 25);
-		put(new JCheckBox("Login as teacher"), 90, 90, 100, 25);
-		loginButton = new JButton("Login");
+		super("Login", 100, 100, 400, 400, observer);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		put(new JLabel("User name"), LABEL_X_POS, 10, LABEL_WIDTH, LABEL_HEIGHT);
+		put(new JLabel("Password"), LABEL_X_POS, 40, LABEL_WIDTH, LABEL_HEIGHT);
+		put(userNameTextField, LABEL_X_POS + LABEL_WIDTH + 10, 10, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+		put(passwordField, LABEL_X_POS + LABEL_WIDTH + 10, 40, TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+		put(teacherLoginCheckBox, 90, 90, 200, 25);
+		put(loginButton, 90, 120, 100, 25);
+		put(createAccountButton, 90, 150, 200, 25);
+		put(exitButton, 90, 180, 200, 25);
+		setActionListeners();
+	}
+	
+	private void setActionListeners() {		setLoginButtonListener();
+		setCreateAccountButtonListener();
+		setExitButtonListener();
+	}
+	
+	private void setLoginButtonListener() {
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				((ApplicationFacade)(getSubject().getObserver())).execute(new StudentLoginCommand(userNameTextField.getText(), passwordField.getPassword().toString()));
+				Response response = null;
+				if(teacherLoginCheckBox.isSelected()) {
+					response = getObserver().execute(new TeacherLoginCommand(userNameTextField.getText(), new String(passwordField.getPassword())));
+				} else {
+					response = getObserver().execute(new StudentLoginCommand(userNameTextField.getText(), new String(passwordField.getPassword())));
+				}
+				View nextView = ViewFactory.createView(response);
+				if(nextView == null) {
+					System.err.println("NULL");
+				}
+				nextView.setObserver(getObserver());
+				close();
 			}
 		});
-		put(loginButton, 90, 120, 100, 25);
+	}
+	
+	private void setCreateAccountButtonListener() {
+		createAccountButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				new CreateProfileView(getObserver());
+				close();
+			}
+		});
+	}
+	
+	private void setExitButtonListener() {
+		exitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				close();
+			}
+		});
 	}
 }

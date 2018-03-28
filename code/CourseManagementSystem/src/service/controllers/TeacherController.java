@@ -1,6 +1,7 @@
 package service.controllers;
 
 import business.business_logic.TeacherBLL;
+import service.interfaces.TeacherInterface;
 import view.commands.AcceptEnrollmentRequestCommand;
 import view.commands.DeclineEnrollmentRequestCommand;
 import view.commands.GradeStudentCommand;
@@ -8,8 +9,12 @@ import view.commands.RemoveStudentFromCourseCommand;
 import view.commands.TeacherLoginCommand;
 
 public class TeacherController {
-	private TeacherBLL teacherBLL;
+	private TeacherInterface teacherBLL;
 	private String loggedInUserName;
+	
+	public TeacherController() {
+		teacherBLL = new TeacherBLL();
+	}
 	
 	public boolean login(TeacherLoginCommand command) {
 		boolean loggedIn = teacherBLL.login(command.getUserName(), command.getPassword());

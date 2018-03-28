@@ -9,8 +9,7 @@ public class CreateProfileCommand implements Command {
 	private String lastName;
 	private String address;
 	private String phone;
-	public CreateProfileCommand(String userName, String password, String passwordAgain, String email, String firstName,
-			String phone, String lastName) {
+	public CreateProfileCommand(String userName, String password, String passwordAgain, String email, String firstName, String lastName, String phone, String address) {
 		super();
 		this.userName = userName;
 		this.password = password;
@@ -18,6 +17,8 @@ public class CreateProfileCommand implements Command {
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.phone = phone;
+		this.address = address;
 	}
 	public String getUserName() {
 		return userName;

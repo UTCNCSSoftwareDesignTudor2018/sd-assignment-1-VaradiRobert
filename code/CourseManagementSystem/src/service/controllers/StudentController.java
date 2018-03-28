@@ -5,20 +5,15 @@ import java.util.List;
 import business.business_logic.StudentBLL;
 import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
-import persistence.domain_model.Exam;
-import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Student;
+import service.response.Response;
+import service.response.StudentProfileResponse;
 import view.commands.CreateProfileCommand;
-import view.commands.GetCoursesCommand;
-import view.commands.GetEnrollmentsCommand;
-import view.commands.GetExamsCommand;
-import view.commands.GetGradesCommand;
 import view.commands.SendEnrollmentRequestCommand;
 import view.commands.StudentLoginCommand;
 import view.commands.UnenrollFromCourseCommand;
 import view.commands.UpdateProfileCommand;
-import view.commands.ViewGroupCommand;
 import view.commands.ViewProfileCommand;
 
 public class StudentController {
@@ -31,7 +26,12 @@ public class StudentController {
 	}
 	
 	public boolean login(StudentLoginCommand command) {
-		return studentBLL.login(command.getUserName(), command.getPassword());
+		boolean loggedIn = studentBLL.login(command.getUserName(), command.getPassword());
+		System.err.println(loggedIn);
+		if(loggedIn == true) {
+			loggedInUserName = command.getUserName();
+		}
+		return loggedIn;
 	}
 	
 	public void createProfile(CreateProfileCommand command) {
@@ -42,35 +42,48 @@ public class StudentController {
 		studentBLL.updateProfile(loggedInUserName, command.getPassword(), command.getPasswordAgain(), command.getEmail(), command.getFirstName(), command.getLastName(), command.getPhone(), command.getAddress());
 	}
 	
-	public Student viewProfile(ViewProfileCommand command) {
-		return studentBLL.viewProfile(loggedInUserName);
+	public Response getProfile(ViewProfileCommand command) {
+		Student student = studentBLL.getStudentByUserName(loggedInUserName);
+		List<Enrollment> enrollments = studentBLL.getEnrollments(loggedInUserName);
+		List<Course> courses = studentBLL.getCourses(loggedInUserName);
+		Group group = studentBLL.getGroup(loggedInUserName);
+		StudentProfileResponse response = new StudentProfileResponse();
+		response.setStudent(student);
+		response.setEnrollments(enrollments);
+		response.setCourses(courses);
+		response.setGroup(group);
+		return response;
 	}
 	
-	public void sendEnrollmentRequest(SendEnrollmentRequestCommand command) {
-		studentBLL.sendEnrollmentRequest(loggedInUserName, command.getCourseName(), command.getTeacherName());
+	public Response unenrollFromCourse(UnenrollFromCourseCommand command) {
+		studentBLL.unenrollFromCourse(loggedInUserName, command.getCourseName());
+		Student student = studentBLL.getStudentByUserName(loggedInUserName);
+		List<Enrollment> enrollments = studentBLL.getEnrollments(loggedInUserName);
+		List<Course> courses = studentBLL.getCourses(loggedInUserName);
+		Group group = studentBLL.getGroup(loggedInUserName);
+		StudentProfileResponse response = new StudentProfileResponse();
+		response.setStudent(student);
+		response.setEnrollments(enrollments);
+		response.setCourses(courses);
+		response.setGroup(group);
+		return response;
 	}
-	
-	public void unenrollFromCourse(UnenrollFromCourseCommand command) {
-		studentBLL.unenrollFromCourse(loggedInUserName, command.getCourseName(), command.getTeacherName());
+
+	public Response enrollToCourse(SendEnrollmentRequestCommand command) {
+		studentBLL.sendEnrollmentRequest(loggedInUserName, command.getCourseName());
+		Student student = studentBLL.getStudentByUserName(loggedInUserName);
+		List<Enrollment> enrollments = studentBLL.getEnrollments(loggedInUserName);
+		List<Course> courses = studentBLL.getCourses(loggedInUserName);
+		Group group = studentBLL.getGroup(loggedInUserName);
+		StudentProfileResponse response = new StudentProfileResponse();
+		response.setStudent(student);
+		response.setEnrollments(enrollments);
+		response.setCourses(courses);
+		response.setGroup(group);
+		return response;
 	}
-	
-	public Group viewGroup(ViewGroupCommand command) {
-		return studentBLL.viewGroup(loggedInUserName);
-	}
-	
-	public List<Exam> getExams(GetExamsCommand command) {
-		return studentBLL.getExams(loggedInUserName);
-	}
-	
-	public List<Course> getCourses(GetCoursesCommand command) {
-		return studentBLL.getCourses(loggedInUserName);
-	}
-	
-	public List<Grade> getGrades(GetGradesCommand command) {
-		return studentBLL.getGrades(loggedInUserName);
-	}
-	
-	public List<Enrollment> getEnrollments(GetEnrollmentsCommand command) {
-		return studentBLL.getEnrollments(loggedInUserName);
+
+	public void logout() {
+		loggedInUserName = "";
 	}
 }
