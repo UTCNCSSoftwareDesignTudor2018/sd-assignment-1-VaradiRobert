@@ -25,4 +25,5 @@ public interface StudentInterface {
 	public List<Student> getStudentsByGroupId(int groupId);
 	public Student getStudentById(int studentId);
 	public List<Student> getByEnrollments(List<Enrollment> enrollments);
+	public void cancelEnrollmentRequest(String loggedInUserName, String courseName);
 }

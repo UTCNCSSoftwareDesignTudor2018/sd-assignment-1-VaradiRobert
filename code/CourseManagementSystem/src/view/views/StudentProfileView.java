@@ -23,6 +23,7 @@ import persistence.domain_model.Group;
 import persistence.domain_model.Student;
 import service.response.Response;
 import utilities.Observer;
+import view.commands.CancelEnrollmentCommand;
 import view.commands.SendEnrollmentRequestCommand;
 import view.commands.StudentLogoutCommand;
 import view.commands.UnenrollFromCourseCommand;
@@ -200,6 +201,27 @@ public class StudentProfileView extends View {
 			}
 		}
 		
+		class CancelEnrollmentRequestButton extends JButton {
+			public CancelEnrollmentRequestButton() {
+				super("Cancel Enrollment Request");
+				setButtonListener();
+			}
+			private void setButtonListener() {
+				this.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent ae) {
+						int selectedRowNumber = enrollmentsTable.getSelectedRow();
+						String courseName = enrollmentsTable.getValueAt(selectedRowNumber, 0).toString();
+						Response response = getObserver().execute(new CancelEnrollmentCommand(courseName));
+						View nextView = ViewFactory.createView(response);
+						Observer obs = getObserver();
+						close();
+						nextView.setObserver(obs);
+					}
+				});
+			}
+		}
+		
 		class EnrollmentTableModel extends AbstractTableModel {
 			private Object[][] data;
 			private String[] columnNames = {"Course Name", "Status", "Teacher Name"};
@@ -233,7 +255,7 @@ public class StudentProfileView extends View {
 		private JTable enrollmentsTable;
 		private UnenrollButton unenrollBtn = new UnenrollButton();
 		private SendEnrollmentRequestButton sendEnrollmentRequestBtn = new SendEnrollmentRequestButton();
-		private JButton logoutButton = new JButton("Logout");
+		private CancelEnrollmentRequestButton cancelEnrollmentButton = new CancelEnrollmentRequestButton();
 		
 		public EnrollmentsPanel(List<Enrollment> enrollments) {
 			super();
@@ -244,17 +266,7 @@ public class StudentProfileView extends View {
 			putComponent(scrollPane, 10, 10, 700, 800);
 			putComponent(unenrollBtn, 400, 810, 300, 25);
 			putComponent(sendEnrollmentRequestBtn, 400, 840, 300, 25);
-			putComponent(logoutButton, 400, 870, 300, 25);
-			logoutButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent ae) {
-					Response response = getObserver().execute(new StudentLogoutCommand());
-					View nextView = ViewFactory.createView(response);
-					Observer obs = getObserver();
-					close();
-					nextView.setObserver(obs);
-				}
-			});
+			putComponent(cancelEnrollmentButton, 400, 870, 300, 25);
 		}
 	}
 	

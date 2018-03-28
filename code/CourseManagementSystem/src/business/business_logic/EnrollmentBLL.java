@@ -34,7 +34,7 @@ public class EnrollmentBLL implements EnrollmentInterface {
 	@Override
 	public void unenrollStudent(int studentId, int courseId) {
 		Enrollment enrollment = enrollmentDAO.findByStudentAndCourseIds(studentId, courseId);
-		enrollment.setStatus(STATUS_DELETED);
+		enrollment.setStatus(STATUS_UNENROLLED);
 		enrollmentDAO.updateEnrollment(enrollment);
 	}
 
@@ -76,6 +76,13 @@ public class EnrollmentBLL implements EnrollmentInterface {
 	public void saveEnrollment(Enrollment enrollment) {
 		enrollment.setId(enrollmentDAO.findAll().size() + 1);
 		enrollmentDAO.addEnrollment(enrollment);
+	}
+
+	@Override
+	public void cancelEnrollment(int identityCardNumber, int id) {
+		Enrollment enrollment = enrollmentDAO.findByStudentAndCourseIds(identityCardNumber, id);
+		enrollment.setStatus(STATUS_CANCELLED);
+		enrollmentDAO.updateEnrollment(enrollment);
 	}
 
 }

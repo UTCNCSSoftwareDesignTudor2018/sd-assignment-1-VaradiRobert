@@ -9,8 +9,10 @@ import persistence.domain_model.Exam;
 import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Student;
+import service.interfaces.StudentInterface;
 import service.response.Response;
 import service.response.StudentProfileResponse;
+import view.commands.CancelEnrollmentCommand;
 import view.commands.CreateProfileCommand;
 import view.commands.SendEnrollmentRequestCommand;
 import view.commands.StudentLoginCommand;
@@ -19,7 +21,7 @@ import view.commands.UpdateProfileCommand;
 import view.commands.ViewProfileCommand;
 
 public class StudentController {
-	private StudentBLL studentBLL;
+	private StudentInterface studentBLL;
 	private String loggedInUserName;
 	
 	public StudentController() {
@@ -82,6 +84,7 @@ public class StudentController {
 	public Response enrollToCourse(SendEnrollmentRequestCommand command) {
 		studentBLL.sendEnrollmentRequest(loggedInUserName, command.getCourseName());
 		Student student = studentBLL.getStudentByUserName(loggedInUserName);
+		System.err.println("Student NULL "  + student == null);
 		List<Enrollment> enrollments = studentBLL.getEnrollments(student.getUserName());
 		List<Course> courses = studentBLL.getCourses(student.getUserName());
 		List<Exam> exams = studentBLL.getExams(student.getUserName());
@@ -99,5 +102,24 @@ public class StudentController {
 
 	public void logout() {
 		loggedInUserName = "";
+	}
+
+	public Response cancelEnrollment(CancelEnrollmentCommand command) {
+		studentBLL.cancelEnrollmentRequest(loggedInUserName, command.getCourseName());
+		Student student = studentBLL.getStudentByUserName(loggedInUserName);
+		System.err.println("Student NULL "  + student == null);
+		List<Enrollment> enrollments = studentBLL.getEnrollments(student.getUserName());
+		List<Course> courses = studentBLL.getCourses(student.getUserName());
+		List<Exam> exams = studentBLL.getExams(student.getUserName());
+		List<Grade> grades = studentBLL.getGrades(student.getUserName());
+		Group group = studentBLL.getGroup(loggedInUserName);
+		StudentProfileResponse response = new StudentProfileResponse();
+		response.setStudent(student);
+		response.setEnrollments(enrollments);
+		response.setCourses(courses);
+		response.setGroup(group);
+		response.setExams(exams);
+		response.setGrades(grades);
+		return response;
 	}
 }

@@ -5,8 +5,8 @@ import service.controllers.TeacherController;
 import service.response.LoginResponse;
 import service.response.Response;
 import service.response.StudentMainMenuResponse;
-import service.response.StudentProfileResponse;
 import utilities.Observer;
+import view.commands.CancelEnrollmentCommand;
 import view.commands.CreateProfileCommand;
 import view.commands.SendEnrollmentRequestCommand;
 import view.commands.StudentLoginCommand;
@@ -52,14 +52,12 @@ public class ApplicationFacade implements Observer {
 	}
 	
 	public Response execute(UnenrollFromCourseCommand command) {
-		studentController.unenrollFromCourse(command);
-		Response response = new StudentProfileResponse();
+		Response response = studentController.unenrollFromCourse(command);
 		return response;
 	}
 
 	public Response execute(SendEnrollmentRequestCommand command) {
-		studentController.enrollToCourse(command);
-		Response response = new StudentProfileResponse();
+		Response response = studentController.enrollToCourse(command);
 		return response;
 	}
 
@@ -76,6 +74,11 @@ public class ApplicationFacade implements Observer {
 	public Response execute(TeacherLogoutCommand teacherLogoutCommand) {
 		teacherController.logout();
 		return new LoginResponse();
+	}
+
+	public Response execute(CancelEnrollmentCommand command) {
+		Response response = studentController.cancelEnrollment(command);
+		return response;
 	}
 	
 }

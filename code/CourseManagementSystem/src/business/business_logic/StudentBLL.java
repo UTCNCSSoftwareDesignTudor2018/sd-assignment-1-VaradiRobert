@@ -165,13 +165,10 @@ public class StudentBLL implements StudentInterface {
 
 	@Override
 	public void unenrollFromCourse(String userName, String courseName) {
-		System.err.println(userName);
 		Student student = studentDAO.findByUserName(userName);
 		CourseInterface courseBLL = new CourseBLL();
 		Course course = courseBLL.getCourseByName(courseName);
 		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
-		System.err.println(student == null);
-		System.err.println(course == null);
 		enrollmentBLL.unenrollStudent(student.getIdentityCardNumber(), course.getId());
 	}
 
@@ -247,6 +244,14 @@ public class StudentBLL implements StudentInterface {
 		return students;
 	}
 
-	
-
+	@Override
+	public void cancelEnrollmentRequest(String loggedInUserName, String courseName) {
+		Student student = studentDAO.findByUserName(loggedInUserName);
+		CourseInterface courseBLL = new CourseBLL();
+		Course course = courseBLL.getCourseByName(courseName);
+		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
+		System.err.println(student == null);
+		System.err.println(course == null);
+		enrollmentBLL.cancelEnrollment(student.getIdentityCardNumber(), course.getId());
+	}
 }
