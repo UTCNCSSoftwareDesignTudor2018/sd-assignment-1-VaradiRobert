@@ -1,0 +1,4 @@
+- Install MySQL Server
+- Install Java 8
+- Install Eclipse
+- Download mysql connector for Java
