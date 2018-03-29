@@ -116,7 +116,6 @@ public class ExamDAO implements ExamDAOInterface {
 			connection = connectionFactory.getConnection();
 			statement = (PreparedStatement)connection.prepareStatement(sqlQuery);
 			statement.setInt(1, courseId);
-			System.err.println(statement.asSql());
 			resultSet = statement.executeQuery();
 			exams = createList(resultSet);
 			ConnectionFactory.close(resultSet);

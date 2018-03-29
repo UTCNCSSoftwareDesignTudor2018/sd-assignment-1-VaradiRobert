@@ -20,7 +20,7 @@ public class ViewFactory {
 		} else if(response instanceof StudentMainMenuResponse) {
 			return new StudentMainMenu();
 		} else if(response instanceof TeacherMainMenuResponse) {
-			return new TeacherMainMenu(((TeacherMainMenuResponse) response).getTeacher(), ((TeacherMainMenuResponse) response).getGroups(), ((TeacherMainMenuResponse) response).getCourses());
+			return new TeacherMainMenu(((TeacherMainMenuResponse) response).getTeacher(), ((TeacherMainMenuResponse) response).getGroups(), ((TeacherMainMenuResponse) response).getEnrollments(), ((TeacherMainMenuResponse) response).getCourses(), ((TeacherMainMenuResponse) response).getGrades());
 		}
 		return null;
 	}

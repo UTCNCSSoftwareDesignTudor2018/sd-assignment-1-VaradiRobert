@@ -3,7 +3,8 @@ package service.controllers;
 import java.util.List;
 
 import business.business_logic.TeacherBLL;
-import persistence.domain_model.Course;
+import persistence.domain_model.Enrollment;
+import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Teacher;
 import service.interfaces.TeacherInterface;
@@ -33,26 +34,58 @@ public class TeacherController {
 		teacherBLL.removeStudentFromCourse(command.getStudentName(), command.getCourseName());
 	}
 	
-	public void acceptEnrollmentRequest(AcceptEnrollmentRequestCommand command) {
+	public Response acceptEnrollmentRequest(AcceptEnrollmentRequestCommand command) {
 		teacherBLL.acceptStudentEnrollmentRequest(command.getStudentName(), command.getCourseName());
+		Teacher teacher = teacherBLL.getTeacherByUserName(loggedInUserName);
+		List<Group> groups = teacherBLL.getAllGroups();
+		List<Enrollment> enrollments = teacherBLL.getTaughtCoursesEnrollments(loggedInUserName);
+		List<Grade> grades = teacherBLL.getGrades(loggedInUserName);
+		TeacherMainMenuResponse response = new TeacherMainMenuResponse();
+		response.setTeacher(teacher);
+		response.setGroups(groups);
+		response.setEnrollments(enrollments);
+		response.setGrades(grades);
+		return response;
 	}
 	
-	public void declineEnrollmentRequest(DeclineEnrollmentRequestCommand command) {
+	public Response declineEnrollmentRequest(DeclineEnrollmentRequestCommand command) {
 		teacherBLL.declineStudentEnrollmentRequest(command.getStudentName(), command.getCourseName());
+		Teacher teacher = teacherBLL.getTeacherByUserName(loggedInUserName);
+		List<Group> groups = teacherBLL.getAllGroups();
+		List<Enrollment> enrollments = teacherBLL.getTaughtCoursesEnrollments(loggedInUserName);
+		List<Grade> grades = teacherBLL.getGrades(loggedInUserName);
+		TeacherMainMenuResponse response = new TeacherMainMenuResponse();
+		response.setTeacher(teacher);
+		response.setGroups(groups);
+		response.setEnrollments(enrollments);
+		response.setGrades(grades);
+		return response;
 	}
 	
-	public void gradeStudent(GradeStudentCommand command) {
-		teacherBLL.gradeStudent(command.getStudentName(), command.getCourseName(), command.getGrade(), loggedInUserName);
+	public Response gradeStudent(GradeStudentCommand command) {
+		teacherBLL.gradeStudent(command.getStudentName(), command.getCourseName(), command.getGrade());
+		Teacher teacher = teacherBLL.getTeacherByUserName(loggedInUserName);
+		List<Group> groups = teacherBLL.getAllGroups();
+		List<Enrollment> enrollments = teacherBLL.getTaughtCoursesEnrollments(loggedInUserName);
+		List<Grade> grades = teacherBLL.getGrades(loggedInUserName);
+		TeacherMainMenuResponse response = new TeacherMainMenuResponse();
+		response.setTeacher(teacher);
+		response.setGroups(groups);
+		response.setEnrollments(enrollments);
+		response.setGrades(grades);
+		return response;
 	}
 
 	public Response getProfile(TeacherLoginCommand command) {
 		Teacher teacher = teacherBLL.getTeacherByUserName(loggedInUserName);
 		List<Group> groups = teacherBLL.getAllGroups();
-		List<Course> courses = teacherBLL.getTaughtCourses(loggedInUserName);
+		List<Enrollment> enrollments = teacherBLL.getTaughtCoursesEnrollments(loggedInUserName);
+		List<Grade> grades = teacherBLL.getGrades(loggedInUserName);
 		TeacherMainMenuResponse response = new TeacherMainMenuResponse();
 		response.setTeacher(teacher);
 		response.setGroups(groups);
-		response.setCourses(courses);
+		response.setEnrollments(enrollments);
+		response.setGrades(grades);
 		return response;
 	}
 
@@ -64,11 +97,13 @@ public class TeacherController {
 		teacherBLL.removeStudentFromCourse(command.getStudentName(), command.getCourseName());
 		Teacher teacher = teacherBLL.getTeacherByUserName(loggedInUserName);
 		List<Group> groups = teacherBLL.getAllGroups();
-		List<Course> courses = teacherBLL.getTaughtCourses(loggedInUserName);
+		List<Enrollment> enrollments = teacherBLL.getTaughtCoursesEnrollments(loggedInUserName);
+		List<Grade> grades = teacherBLL.getGrades(loggedInUserName);
 		TeacherMainMenuResponse response = new TeacherMainMenuResponse();
 		response.setTeacher(teacher);
 		response.setGroups(groups);
-		response.setCourses(courses);
+		response.setEnrollments(enrollments);
+		response.setGrades(grades);
 		return response;
 	}
 }

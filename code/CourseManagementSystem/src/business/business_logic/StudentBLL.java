@@ -1,8 +1,6 @@
 package business.business_logic;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,7 +101,6 @@ public class StudentBLL implements StudentInterface {
 		studentDAO.createStudent(student);;		
 		CourseInterface courseBLL = new CourseBLL();
 		List<Course> courses = courseBLL.getAll();
-		GradeInterface gradeBLL = new GradeBLL();
 		EnrollmentInterface enrollmentBLL = new EnrollmentBLL();
 		for(Course c : courses) {
 			Enrollment enrollment = new Enrollment();
@@ -111,12 +108,6 @@ public class StudentBLL implements StudentInterface {
 			enrollment.setCourseId(c.getId());
 			enrollment.setStatus(EnrollmentBLL.STATUS_UNENROLLED);
 			enrollmentBLL.saveEnrollment(enrollment);
-			Grade grade = new Grade();
-			grade.setCourseId(c.getId());
-			grade.setStudentId(student.getIdentityCardNumber());
-			grade.setDate(new Date(Calendar.getInstance().getTime().getTime()));
-			grade.setValue(-1);
-			gradeBLL.saveGrade(grade);
 		}
 	}
 

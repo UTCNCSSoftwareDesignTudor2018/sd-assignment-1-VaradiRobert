@@ -36,4 +36,8 @@ public class Student extends User {
 	public void setGroup(Group group) {
 		this.group = group;
 	}
+	@Override
+	public int hashCode() {
+		return getUserName().hashCode();
+	}
 }

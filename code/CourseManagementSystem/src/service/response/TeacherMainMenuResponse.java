@@ -1,10 +1,17 @@
 package service.response;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import business.business_logic.EnrollmentBLL;
 import persistence.domain_model.Course;
+import persistence.domain_model.Enrollment;
 import persistence.domain_model.Exam;
+import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
+import persistence.domain_model.Student;
 import persistence.domain_model.Teacher;
 
 public class TeacherMainMenuResponse extends Response {
@@ -12,20 +19,16 @@ public class TeacherMainMenuResponse extends Response {
 		super();
 	}
 	private Teacher teacher;
-	private List<Course> courses;
+	private List<Enrollment> enrollments;
 	private List<Group> groups;
 	private List<Exam> exams;
+	private List<Course> courses;
+	private Map<String, Map<String, Double>> grades;
 	public Teacher getTeacher() {
 		return teacher;
 	}
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
-	}
-	public List<Course> getCourses() {
-		return courses;
-	}
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
 	}
 	public List<Group> getGroups() {
 		return groups;
@@ -38,5 +41,46 @@ public class TeacherMainMenuResponse extends Response {
 	}
 	public void setExams(List<Exam> exams) {
 		this.exams = exams;
+	}
+	public void setEnrollments(List<Enrollment> enrollments) {
+		this.enrollments = enrollments;
+		Map<Course, List<Student>> coursesAndStudents = new HashMap<Course, List<Student>>();
+		for(Enrollment e : enrollments) {
+			if(e.getStatus().equals(EnrollmentBLL.STATUS_ACCEPTED)) {
+				List<Student> students = coursesAndStudents.get(e.getCourse());
+				if(students == null) {
+					students = new ArrayList<Student>();
+					coursesAndStudents.put(e.getCourse(), students);
+				} else {
+					students.add(e.getStudent());
+				}
+			}
+		}
+		courses = new ArrayList<Course>();
+		for(Course c : coursesAndStudents.keySet()) {
+			c.setEnrolledStudents(coursesAndStudents.get(c));
+			courses.add(c);
+		}
+	}
+	public List<Enrollment> getEnrollments() {
+		return enrollments;
+	}
+	public List<Course> getCourses() {
+		return courses;
+	}
+	public void setGrades(List<Grade> gradeList) {
+		grades = new HashMap<String, Map<String, Double>>();
+		for(Grade g : gradeList) {
+			Map<String, Double> entry = grades.get(g.getCourse().getName());
+			if(entry == null) {
+				entry = new HashMap<String, Double>();
+				grades.put(g.getCourse().getName(), entry);
+			}
+			entry.put(g.getStudent().getUserName(), g.getValue());
+		}
+	}
+	
+	public Map<String, Map<String, Double>> getGrades() {
+		return grades;
 	}
 }

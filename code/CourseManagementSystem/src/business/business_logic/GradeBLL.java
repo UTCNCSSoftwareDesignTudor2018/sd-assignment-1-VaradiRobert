@@ -5,8 +5,10 @@ import java.util.List;
 import business.interfaces.GradeDAOInterface;
 import persistence.dao.GradeDAO;
 import persistence.domain_model.Grade;
+import persistence.domain_model.Student;
 import service.interfaces.CourseInterface;
 import service.interfaces.GradeInterface;
+import service.interfaces.StudentInterface;
 
 public class GradeBLL implements GradeInterface {
 	private GradeDAOInterface gradeDAO;
@@ -30,4 +32,24 @@ public class GradeBLL implements GradeInterface {
 		gradeDAO.addGrade(grade);
 	}
 	
+	@Override
+	public void updateGrade(Grade grade) {
+		gradeDAO.update(grade);
+	}
+
+	@Override
+	public List<Grade> getGradesByCourseId(int courseId) {
+		List<Grade> grades = gradeDAO.findByCourseId(courseId);
+		StudentInterface studentBLL = new StudentBLL();
+		for(Grade g : grades) {
+			Student student = studentBLL.getStudentById(g.getStudentId());
+			g.setStudent(student);
+		}
+		return grades;
+	}
+
+	@Override
+	public Grade getGradeByCourseAndStudentId(int id, int identityCardNumber) {
+		return gradeDAO.findByCourseAndStudentId(id, identityCardNumber);
+	} 
 }

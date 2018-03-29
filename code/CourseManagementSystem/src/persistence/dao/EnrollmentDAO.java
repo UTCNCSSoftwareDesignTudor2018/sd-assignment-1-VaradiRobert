@@ -186,6 +186,7 @@ public class EnrollmentDAO implements EnrollmentDAOInterface {
 			statement.setInt(2, enrollment.getStudentId());
 			statement.setString(3, enrollment.getStatus());
 			statement.setInt(4, enrollment.getId());
+			System.out.println(statement.asSql());
 			statement.executeUpdate();
 			ConnectionFactory.close(statement);
 			ConnectionFactory.close(connection);

@@ -19,6 +19,7 @@ public abstract class View extends JFrame {
 	public static final int TEXT_FIELD_HEIGHT = 25;
 	public View(String windowName, int xPos, int yPos, int width, int height, Observer observer) {
 		super(windowName);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.subject = new Observable(observer);
 		this.setName(windowName);
 		contentPane = this.getContentPane();
@@ -28,6 +29,7 @@ public abstract class View extends JFrame {
 	}
 	
 	public void close() {
+		this.setVisible(false);
 		this.dispose();
 	}
 	

@@ -1,12 +1,16 @@
 package business.business_logic;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import business.interfaces.EnrollmentDAOInterface;
 import persistence.dao.EnrollmentDAO;
 import persistence.domain_model.Enrollment;
+import persistence.domain_model.Grade;
 import service.interfaces.CourseInterface;
 import service.interfaces.EnrollmentInterface;
+import service.interfaces.GradeInterface;
 import service.interfaces.StudentInterface;
 
 public class EnrollmentBLL implements EnrollmentInterface {
@@ -43,6 +47,13 @@ public class EnrollmentBLL implements EnrollmentInterface {
 		Enrollment enrollment = enrollmentDAO.findByStudentAndCourseIds(studentId, courseId);
 		enrollment.setStatus(STATUS_ACCEPTED);
 		enrollmentDAO.updateEnrollment(enrollment);
+		GradeInterface gradeBLL = new GradeBLL();
+		Grade grade = new Grade();
+		grade.setCourseId(courseId);
+		grade.setStudentId(studentId);
+		grade.setValue(-1);
+		grade.setDate(new Date(Calendar.getInstance().getTime().getTime()));
+		gradeBLL.saveGrade(grade);
 	}
 
 	@Override
@@ -57,12 +68,9 @@ public class EnrollmentBLL implements EnrollmentInterface {
 
 	@Override
 	public void sendEnrollmentRequest(int identityCardNumber, int courseId) {
-		Enrollment enrollment = new Enrollment();
-		enrollment.setCourseId(courseId);
-		enrollment.setStudentId(identityCardNumber);
+		Enrollment enrollment = enrollmentDAO.findByStudentAndCourseIds(identityCardNumber, courseId);
 		enrollment.setStatus(STATUS_REQUEST);
-		enrollment.setId(enrollmentDAO.findAll().size() + 1);
-		enrollmentDAO.addEnrollment(enrollment);
+		enrollmentDAO.updateEnrollment(enrollment);
 	}
 
 	@Override
