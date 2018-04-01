@@ -2,15 +2,15 @@ package business.business_logic;
 
 import java.util.List;
 
-import business.interfaces.CourseDAOInterface;
+import business.interfaces.CourseInterface;
+import business.interfaces.EnrollmentInterface;
+import business.interfaces.StudentInterface;
+import business.interfaces.TeacherInterface;
 import persistence.dao.CourseDAO;
 import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
 import persistence.domain_model.Teacher;
-import service.interfaces.CourseInterface;
-import service.interfaces.EnrollmentInterface;
-import service.interfaces.StudentInterface;
-import service.interfaces.TeacherInterface;
+import persistence.interfaces.CourseDAOInterface;
 
 public class CourseBLL implements CourseInterface {
 	private CourseDAOInterface courseDAO;

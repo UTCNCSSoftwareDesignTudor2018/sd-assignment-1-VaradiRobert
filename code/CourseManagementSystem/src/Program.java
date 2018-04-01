@@ -4,7 +4,10 @@ import service.facade.ApplicationFacade;
 import view.views.LoginView;
 
 public class Program {
+	
 	public static void main(String[] args) throws SQLException {
-		new LoginView(new ApplicationFacade());
+		
+		new LoginView(new ApplicationFacade());	
 	}
+	
 }

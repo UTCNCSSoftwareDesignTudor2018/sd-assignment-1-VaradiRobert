@@ -1,4 +1,4 @@
-package service.interfaces;
+package business.interfaces;
 
 import persistence.domain_model.Exam;
 

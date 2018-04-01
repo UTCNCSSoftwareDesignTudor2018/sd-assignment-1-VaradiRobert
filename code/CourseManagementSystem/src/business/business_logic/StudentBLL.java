@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import business.interfaces.StudentDAOInterface;
+import business.interfaces.CourseInterface;
+import business.interfaces.EnrollmentInterface;
+import business.interfaces.ExamInterface;
+import business.interfaces.GradeInterface;
+import business.interfaces.GroupInterface;
+import business.interfaces.StudentInterface;
 import business.security.PasswordEncrypter;
 import business.validators.Validator;
 import business.validators.student.StudentEmailValidator;
@@ -20,12 +25,7 @@ import persistence.domain_model.Exam;
 import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Student;
-import service.interfaces.CourseInterface;
-import service.interfaces.EnrollmentInterface;
-import service.interfaces.ExamInterface;
-import service.interfaces.GradeInterface;
-import service.interfaces.GroupInterface;
-import service.interfaces.StudentInterface;
+import persistence.interfaces.StudentDAOInterface;
 
 public class StudentBLL implements StudentInterface {
 	private List<Validator<Student>> validators;

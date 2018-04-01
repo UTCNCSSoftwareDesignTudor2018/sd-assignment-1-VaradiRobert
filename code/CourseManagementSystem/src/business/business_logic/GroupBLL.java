@@ -2,11 +2,11 @@ package business.business_logic;
 
 import java.util.List;
 
-import business.interfaces.GroupDAOInterface;
+import business.interfaces.GroupInterface;
+import business.interfaces.StudentInterface;
 import persistence.dao.GroupDAO;
 import persistence.domain_model.Group;
-import service.interfaces.GroupInterface;
-import service.interfaces.StudentInterface;
+import persistence.interfaces.GroupDAOInterface;
 
 public class GroupBLL implements GroupInterface {
 	private GroupDAOInterface groupDAO;

@@ -13,9 +13,9 @@ import org.xml.sax.SAXException;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
-import business.interfaces.ExamDAOInterface;
 import persistence.connection.ConnectionFactory;
 import persistence.domain_model.Exam;
+import persistence.interfaces.ExamDAOInterface;
 
 public class ExamDAO implements ExamDAOInterface {
 

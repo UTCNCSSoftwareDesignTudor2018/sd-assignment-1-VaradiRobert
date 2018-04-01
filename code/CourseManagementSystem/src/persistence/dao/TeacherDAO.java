@@ -13,9 +13,9 @@ import org.xml.sax.SAXException;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
-import business.interfaces.TeacherDAOInterface;
 import persistence.connection.ConnectionFactory;
 import persistence.domain_model.Teacher;
+import persistence.interfaces.TeacherDAOInterface;
 
 public class TeacherDAO implements TeacherDAOInterface {
 

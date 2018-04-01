@@ -1,10 +1,10 @@
 package business.business_logic;
 
-import business.interfaces.ExamDAOInterface;
+import business.interfaces.CourseInterface;
+import business.interfaces.ExamInterface;
 import persistence.dao.ExamDAO;
 import persistence.domain_model.Exam;
-import service.interfaces.CourseInterface;
-import service.interfaces.ExamInterface;
+import persistence.interfaces.ExamDAOInterface;
 
 public class ExamBLL implements ExamInterface {
 	private ExamDAOInterface examDAO;

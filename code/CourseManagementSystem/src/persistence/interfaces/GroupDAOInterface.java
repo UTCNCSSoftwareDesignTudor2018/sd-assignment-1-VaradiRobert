@@ -1,4 +1,4 @@
-package business.interfaces;
+package persistence.interfaces;
 
 import java.util.List;
 

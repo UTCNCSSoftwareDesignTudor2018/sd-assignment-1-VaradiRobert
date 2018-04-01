@@ -3,7 +3,12 @@ package business.business_logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import business.interfaces.TeacherDAOInterface;
+import business.interfaces.CourseInterface;
+import business.interfaces.EnrollmentInterface;
+import business.interfaces.GradeInterface;
+import business.interfaces.GroupInterface;
+import business.interfaces.StudentInterface;
+import business.interfaces.TeacherInterface;
 import business.security.PasswordEncrypter;
 import persistence.dao.TeacherDAO;
 import persistence.domain_model.Course;
@@ -12,12 +17,7 @@ import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Student;
 import persistence.domain_model.Teacher;
-import service.interfaces.CourseInterface;
-import service.interfaces.EnrollmentInterface;
-import service.interfaces.GradeInterface;
-import service.interfaces.GroupInterface;
-import service.interfaces.StudentInterface;
-import service.interfaces.TeacherInterface;
+import persistence.interfaces.TeacherDAOInterface;
 
 public class TeacherBLL implements TeacherInterface {
 	private TeacherDAOInterface teacherDAO;

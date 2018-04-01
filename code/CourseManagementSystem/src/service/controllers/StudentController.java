@@ -3,13 +3,13 @@ package service.controllers;
 import java.util.List;
 
 import business.business_logic.StudentBLL;
+import business.interfaces.StudentInterface;
 import persistence.domain_model.Course;
 import persistence.domain_model.Enrollment;
 import persistence.domain_model.Exam;
 import persistence.domain_model.Grade;
 import persistence.domain_model.Group;
 import persistence.domain_model.Student;
-import service.interfaces.StudentInterface;
 import service.response.Response;
 import service.response.StudentProfileResponse;
 import view.commands.CancelEnrollmentCommand;

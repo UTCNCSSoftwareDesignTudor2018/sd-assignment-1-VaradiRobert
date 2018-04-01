@@ -13,9 +13,9 @@ import org.xml.sax.SAXException;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
-import business.interfaces.GroupDAOInterface;
 import persistence.connection.ConnectionFactory;
 import persistence.domain_model.Group;
+import persistence.interfaces.GroupDAOInterface;
 
 public class GroupDAO implements GroupDAOInterface {
 

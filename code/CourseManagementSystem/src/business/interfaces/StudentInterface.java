@@ -1,4 +1,4 @@
-package service.interfaces;
+package business.interfaces;
 
 import java.util.List;
 

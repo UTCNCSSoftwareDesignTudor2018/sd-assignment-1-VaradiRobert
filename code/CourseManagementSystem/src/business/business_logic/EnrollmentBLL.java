@@ -4,14 +4,14 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
-import business.interfaces.EnrollmentDAOInterface;
+import business.interfaces.CourseInterface;
+import business.interfaces.EnrollmentInterface;
+import business.interfaces.GradeInterface;
+import business.interfaces.StudentInterface;
 import persistence.dao.EnrollmentDAO;
 import persistence.domain_model.Enrollment;
 import persistence.domain_model.Grade;
-import service.interfaces.CourseInterface;
-import service.interfaces.EnrollmentInterface;
-import service.interfaces.GradeInterface;
-import service.interfaces.StudentInterface;
+import persistence.interfaces.EnrollmentDAOInterface;
 
 public class EnrollmentBLL implements EnrollmentInterface {
 	private EnrollmentDAOInterface enrollmentDAO;
