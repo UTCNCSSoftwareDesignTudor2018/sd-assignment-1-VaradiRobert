@@ -1,4 +1,4 @@
-package persistence.domain_model;
+package persistence.entities;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package service.response;
 
 import java.util.List;
 
-import persistence.domain_model.Enrollment;
+import persistence.entities.Enrollment;
 
 public class ViewCoursesResponse extends Response {
 	private List<Enrollment> enrollments;

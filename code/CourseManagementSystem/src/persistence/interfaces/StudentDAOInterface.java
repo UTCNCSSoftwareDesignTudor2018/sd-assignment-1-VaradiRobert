@@ -2,7 +2,7 @@ package persistence.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Student;
+import persistence.entities.Student;
 
 public interface StudentDAOInterface {
 	public List<Student> findAll();

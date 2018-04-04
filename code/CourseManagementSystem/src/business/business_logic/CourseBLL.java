@@ -7,9 +7,9 @@ import business.interfaces.EnrollmentInterface;
 import business.interfaces.StudentInterface;
 import business.interfaces.TeacherInterface;
 import persistence.dao.CourseDAO;
-import persistence.domain_model.Course;
-import persistence.domain_model.Enrollment;
-import persistence.domain_model.Teacher;
+import persistence.entities.Course;
+import persistence.entities.Enrollment;
+import persistence.entities.Teacher;
 import persistence.interfaces.CourseDAOInterface;
 
 public class CourseBLL implements CourseInterface {

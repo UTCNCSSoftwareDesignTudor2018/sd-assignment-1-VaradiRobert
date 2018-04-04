@@ -14,7 +14,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 import persistence.connection.ConnectionFactory;
-import persistence.domain_model.Grade;
+import persistence.entities.Grade;
 import persistence.interfaces.GradeDAOInterface;
 
 public class GradeDAO implements GradeDAOInterface {

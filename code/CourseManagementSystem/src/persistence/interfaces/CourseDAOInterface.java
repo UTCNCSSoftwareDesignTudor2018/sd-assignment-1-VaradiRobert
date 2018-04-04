@@ -2,7 +2,7 @@ package persistence.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Course;
+import persistence.entities.Course;
 
 public interface CourseDAOInterface {
 	public List<Course> findAll();

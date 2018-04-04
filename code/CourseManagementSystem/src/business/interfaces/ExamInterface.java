@@ -1,6 +1,6 @@
 package business.interfaces;
 
-import persistence.domain_model.Exam;
+import persistence.entities.Exam;
 
 public interface ExamInterface {
 	public Exam getExam(int examId);

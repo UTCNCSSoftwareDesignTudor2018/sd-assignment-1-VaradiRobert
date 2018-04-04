@@ -14,7 +14,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 import persistence.connection.ConnectionFactory;
-import persistence.domain_model.Exam;
+import persistence.entities.Exam;
 import persistence.interfaces.ExamDAOInterface;
 
 public class ExamDAO implements ExamDAOInterface {

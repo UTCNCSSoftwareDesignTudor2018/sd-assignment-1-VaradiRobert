@@ -11,12 +11,12 @@ import business.interfaces.StudentInterface;
 import business.interfaces.TeacherInterface;
 import business.security.PasswordEncrypter;
 import persistence.dao.TeacherDAO;
-import persistence.domain_model.Course;
-import persistence.domain_model.Enrollment;
-import persistence.domain_model.Grade;
-import persistence.domain_model.Group;
-import persistence.domain_model.Student;
-import persistence.domain_model.Teacher;
+import persistence.entities.Course;
+import persistence.entities.Enrollment;
+import persistence.entities.Grade;
+import persistence.entities.Group;
+import persistence.entities.Student;
+import persistence.entities.Teacher;
 import persistence.interfaces.TeacherDAOInterface;
 
 public class TeacherBLL implements TeacherInterface {

@@ -1,4 +1,4 @@
-package persistence.domain_model;
+package persistence.entities;
 
 public class Enrollment {
 	private int id;

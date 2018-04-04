@@ -5,7 +5,7 @@ import java.util.List;
 import business.interfaces.GroupInterface;
 import business.interfaces.StudentInterface;
 import persistence.dao.GroupDAO;
-import persistence.domain_model.Group;
+import persistence.entities.Group;
 import persistence.interfaces.GroupDAOInterface;
 
 public class GroupBLL implements GroupInterface {

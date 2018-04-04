@@ -2,7 +2,7 @@ package business.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Grade;
+import persistence.entities.Grade;
 
 public interface GradeInterface {
 	public List<Grade> getGradesByStudentId(int studentId);

@@ -2,12 +2,12 @@ package business.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Course;
-import persistence.domain_model.Enrollment;
-import persistence.domain_model.Grade;
-import persistence.domain_model.Group;
-import persistence.domain_model.Student;
-import persistence.domain_model.Teacher;
+import persistence.entities.Course;
+import persistence.entities.Enrollment;
+import persistence.entities.Grade;
+import persistence.entities.Group;
+import persistence.entities.Student;
+import persistence.entities.Teacher;
 
 public interface TeacherInterface {
 	public boolean login(String userName, String password);

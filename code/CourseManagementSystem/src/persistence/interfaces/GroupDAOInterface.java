@@ -2,7 +2,7 @@ package persistence.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Group;
+import persistence.entities.Group;
 
 public interface GroupDAOInterface {
 	public Group findGroupById(int groupId);

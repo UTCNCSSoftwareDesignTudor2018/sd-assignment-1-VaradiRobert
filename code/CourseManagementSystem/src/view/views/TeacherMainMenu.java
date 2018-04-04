@@ -19,11 +19,11 @@ import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 
 import business.business_logic.EnrollmentBLL;
-import persistence.domain_model.Course;
-import persistence.domain_model.Enrollment;
-import persistence.domain_model.Group;
-import persistence.domain_model.Student;
-import persistence.domain_model.Teacher;
+import persistence.entities.Course;
+import persistence.entities.Enrollment;
+import persistence.entities.Group;
+import persistence.entities.Student;
+import persistence.entities.Teacher;
 import service.response.Response;
 import utilities.Observer;
 import view.commands.AcceptEnrollmentRequestCommand;

@@ -14,7 +14,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 import persistence.connection.ConnectionFactory;
-import persistence.domain_model.Course;
+import persistence.entities.Course;
 import persistence.interfaces.CourseDAOInterface;
 
 public class CourseDAO implements CourseDAOInterface {

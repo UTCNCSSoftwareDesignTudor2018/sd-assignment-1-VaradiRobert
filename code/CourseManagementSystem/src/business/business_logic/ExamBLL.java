@@ -3,7 +3,7 @@ package business.business_logic;
 import business.interfaces.CourseInterface;
 import business.interfaces.ExamInterface;
 import persistence.dao.ExamDAO;
-import persistence.domain_model.Exam;
+import persistence.entities.Exam;
 import persistence.interfaces.ExamDAOInterface;
 
 public class ExamBLL implements ExamInterface {

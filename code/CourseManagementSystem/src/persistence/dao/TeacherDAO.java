@@ -14,7 +14,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 import persistence.connection.ConnectionFactory;
-import persistence.domain_model.Teacher;
+import persistence.entities.Teacher;
 import persistence.interfaces.TeacherDAOInterface;
 
 public class TeacherDAO implements TeacherDAOInterface {

@@ -2,7 +2,7 @@ package business.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Group;
+import persistence.entities.Group;
 
 public interface GroupInterface {
 	public List<Group> getAll();

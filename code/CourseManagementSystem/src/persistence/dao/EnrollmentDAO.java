@@ -14,7 +14,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 import persistence.connection.ConnectionFactory;
-import persistence.domain_model.Enrollment;
+import persistence.entities.Enrollment;
 import persistence.interfaces.EnrollmentDAOInterface;
 
 public class EnrollmentDAO implements EnrollmentDAOInterface {

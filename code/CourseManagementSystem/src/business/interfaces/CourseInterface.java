@@ -2,7 +2,7 @@ package business.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Course;
+import persistence.entities.Course;
 
 public interface CourseInterface {
 	public Course getCourse(int courseId);

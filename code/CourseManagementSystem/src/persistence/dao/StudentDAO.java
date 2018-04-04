@@ -14,7 +14,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 import persistence.connection.ConnectionFactory;
-import persistence.domain_model.Student;
+import persistence.entities.Student;
 import persistence.interfaces.StudentDAOInterface;
 
 public class StudentDAO implements StudentDAOInterface {

@@ -6,8 +6,8 @@ import business.interfaces.CourseInterface;
 import business.interfaces.GradeInterface;
 import business.interfaces.StudentInterface;
 import persistence.dao.GradeDAO;
-import persistence.domain_model.Grade;
-import persistence.domain_model.Student;
+import persistence.entities.Grade;
+import persistence.entities.Student;
 import persistence.interfaces.GradeDAOInterface;
 
 public class GradeBLL implements GradeInterface {

@@ -9,8 +9,8 @@ import business.interfaces.EnrollmentInterface;
 import business.interfaces.GradeInterface;
 import business.interfaces.StudentInterface;
 import persistence.dao.EnrollmentDAO;
-import persistence.domain_model.Enrollment;
-import persistence.domain_model.Grade;
+import persistence.entities.Enrollment;
+import persistence.entities.Grade;
 import persistence.interfaces.EnrollmentDAOInterface;
 
 public class EnrollmentBLL implements EnrollmentInterface {

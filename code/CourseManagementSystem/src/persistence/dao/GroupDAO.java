@@ -14,7 +14,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 import persistence.connection.ConnectionFactory;
-import persistence.domain_model.Group;
+import persistence.entities.Group;
 import persistence.interfaces.GroupDAOInterface;
 
 public class GroupDAO implements GroupDAOInterface {

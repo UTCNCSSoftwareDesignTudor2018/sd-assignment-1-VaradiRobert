@@ -1,7 +1,7 @@
 package business.validators.student;
 
 import business.validators.Validator;
-import persistence.domain_model.Student;
+import persistence.entities.Student;
 
 public class StudentEmailValidator implements Validator<Student> {
 

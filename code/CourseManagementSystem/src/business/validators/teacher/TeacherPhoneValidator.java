@@ -1,7 +1,7 @@
 package business.validators.teacher;
 
 import business.validators.Validator;
-import persistence.domain_model.Teacher;
+import persistence.entities.Teacher;
 
 public class TeacherPhoneValidator implements Validator<Teacher> {
 

@@ -2,7 +2,7 @@ package persistence.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Exam;
+import persistence.entities.Exam;
 
 public interface ExamDAOInterface {
 	public List<Exam> findAll();

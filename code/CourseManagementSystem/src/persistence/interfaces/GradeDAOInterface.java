@@ -2,7 +2,7 @@ package persistence.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Grade;
+import persistence.entities.Grade;
 
 public interface GradeDAOInterface {
 	public List<Grade> findAll();

@@ -2,7 +2,7 @@ package business.interfaces;
 
 import java.util.List;
 
-import persistence.domain_model.Enrollment;
+import persistence.entities.Enrollment;
 
 public interface EnrollmentInterface {
 	public List<Enrollment> getEnrollments(int studentId);

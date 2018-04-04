@@ -4,10 +4,10 @@ import java.util.List;
 
 import business.business_logic.TeacherBLL;
 import business.interfaces.TeacherInterface;
-import persistence.domain_model.Enrollment;
-import persistence.domain_model.Grade;
-import persistence.domain_model.Group;
-import persistence.domain_model.Teacher;
+import persistence.entities.Enrollment;
+import persistence.entities.Grade;
+import persistence.entities.Group;
+import persistence.entities.Teacher;
 import service.response.Response;
 import service.response.TeacherMainMenuResponse;
 import view.commands.AcceptEnrollmentRequestCommand;
